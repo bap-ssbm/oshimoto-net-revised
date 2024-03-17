@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+* {
+  cursor: none;
+}
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -34,4 +36,14 @@ body {
 
 .wrapper {
   
+}
+
+.txt {
+  @media (min-width: 768px) {
+      font-size: 16px;
+  }
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
 }

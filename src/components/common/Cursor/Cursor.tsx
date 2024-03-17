@@ -1,4 +1,4 @@
-
+'use client'
 import { useEffect, useRef, useState } from 'react';
 import './Cursor.scss';
 
@@ -18,8 +18,8 @@ function Cursor({className, ...props} : Props) {
     useEffect(() => {
        
         const positionElement = (e: MouseEvent) => {
-            setMouseY(e.clientY - 17);
-            setMouseX(e.clientX - 17);
+            setMouseY(e.clientY);
+            setMouseX(e.clientX);
         };
 
         const hoverHandler = (e: MouseEvent) => {
@@ -55,9 +55,8 @@ function Cursor({className, ...props} : Props) {
 
   return (
     <div className='pointer-events-none w-screen h-svh fixed top-0 left-0 bg-black mix-blend-difference z-[99999]'>
-<div ref={cursorRef} style={{ transform: `translate3d(${mouseX}px, ${mouseY}px, 0)`, display: outOfScreen?'none':'inline-block'}} id='cursor' className='duration-100 cursor pointer-events-none w-10 h-10 mix-blend-difference rounded-full relative z-50 invert pc:inline-blockhidden pc:flex items-center justify-center hidden'>
-     {hovered&&<p className='relative z-50 text-black text-2xl mix-blend-difference text-center ease-in duration-100'>押</p>}
-    <div style={{ transform: `${hovered? 'scale(4)' : ''}` }}  className='curso__inner w-full h-full rounded-full invert opacity-80 bg-back absolute top-0 left-0 border border-white ease-in-out duration-500 text-sm'>   
+<div ref={cursorRef} style={{ transform: `translate3d(${mouseX}px, ${mouseY}px, 0)`, display: outOfScreen?'none':'inline-block'}} id='cursor' className='cursor pointer-events-none w-3 h-3 mix-blend-difference rounded-full relative z-50 invert pc:inline-blockhidden pc:flex items-center justify-center hidden'>
+    <div style={{ transform: `${hovered? 'scale(4)' : ''}` }}  className='curso__inner w-full h-full rounded-full invert opacity-80 bg-back absolute top-0 left-0 border bg-white ease-in-out duration-500 text-sm'>   
     </div>
   </div>
     </div>

@@ -1,7 +1,7 @@
 'use client'
 import ReactLenis from '@studio-freight/react-lenis';
 import { useEffect, useState } from 'react';
-// import Cursor from '../common/Cursor/Cursor';
+import Cursor from './Cursor/Cursor';
 
 interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     children: React.ReactNode;
@@ -26,7 +26,7 @@ function SectionLayout({children,  ...props}: Props) {
     <>
     {(windowWidth>768)?
       (<ReactLenis root >
-        {/* <Cursor/> */}
+        <Cursor/>
         {children}
         </ReactLenis>):
       ( <div>
