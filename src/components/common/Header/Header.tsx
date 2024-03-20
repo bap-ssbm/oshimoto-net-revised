@@ -18,7 +18,7 @@ function Header() {
 
 
   return (
-   <nav ref={navRef} className='nav w-screen fixed left-0 top-0 z-50 pc:h-[70px] h-[50px] pc:pl-5 pl-3 duration-300 mix-blend-difference '>
+   <nav ref={navRef} className='nav w-screen z-50 fixed left-0 top-0 z-50 pc:h-[70px] h-[50px] pc:pl-5 pl-3 duration-300 mix-blend-difference '>
     <Link href='/'>
         <h1 className='nav__logo text-white flex gap-4 items-center h-full'>
             {content.title}

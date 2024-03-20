@@ -33,7 +33,7 @@ function GallerySect() {
    
   return (
     <div className='flex justify-center w-screen'>
-       <Photo className='pc:w-[500px] w-full' width={500} height={200} alt='' src='/images/top/img-gallery-01.jpg'/>
+       {/* <Photo className='pc:w-[500px] w-full' width={500} height={200} alt='' src='/images/top/img-gallery-01.jpg'/> */}
     </div>
   );
 }

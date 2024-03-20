@@ -29,7 +29,7 @@ function MainVideo() {
 
    
   return (
-    <div className='mainVideo pc:w-[40%] w-full'>
+    <div className='mainVideo pc:w-[40%] pc:max-w-[500px] w-full'>
        <video id='video' className='object-cover w-full right-0 opacity-70 ' autoPlay playsInline muted loop preload='auto'>
             <source src="/videos/video-hero.mp4" type="video/mp4" />
             Your browser does not support the video tag.

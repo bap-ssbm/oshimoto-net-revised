@@ -37,12 +37,10 @@ function Hero() {
 
    
   return (
-    <div className='hero flex pc:flex-row flex-col justify-center items-center text-white h-screen pc:gap-[calc(50/1440*100vw)] px-10'>
-        <p className='text-3xl pc:mb-0 mb-10 font-extralight'>
-            <span className='text-5xl font-bold'>Ryuichi</span><br/><span className='opacity-70'>is a </span>Japanese photographer<br/>
-            <span className='opacity-70'>with</span> <span className=''>40+</span><span className='opacity-70'> years of experience</span>
+    <div className='hero flex pc:flex-row flex-col justify-center items-center text-white h-screen pc:gap-[60px] px-10'>
+        <p className=' pc:mb-0 mb-10 pc:text-7xl leading-none text-[calc(50/375*100vw)]'>
+            <span className='opacity-70'>40 Years</span><br/>of Photography
         </p>
-       
         <MainVideo/>
     </div>
   );
