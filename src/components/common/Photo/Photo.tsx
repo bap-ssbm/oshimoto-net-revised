@@ -1,35 +1,33 @@
-'use client'
+'use client';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import Image from 'next/image'
+import Image from 'next/image';
 import { useRef } from 'react';
 
-const content = {
+const content = {};
 
+export interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  width: number;
+  height: number;
+  alt: string;
+  src: string;
 }
+function Photo({ width, height, alt, src, ...props }: Props) {
+  const navRef = useRef<HTMLDivElement>(null);
 
-interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>  {
-    width: number,
-    height: number,
-    alt: string,
-    src: string 
-}
-function Header({width, height, alt, src,  ...props}: Props) {
-    const navRef = useRef<HTMLDivElement>(null)
-    
-    
-    gsap.registerPlugin(ScrollTrigger as gsap.GSAPConfig)
-
+  gsap.registerPlugin(ScrollTrigger as gsap.GSAPConfig);
 
   return (
-  <div {...props}>
-    <Image className='pointer-events-none w-auto h-full max-w-full' 
+    <div {...props}>
+      <Image
+        className="pointer-events-none w-auto h-full max-w-full"
         src={src}
         width={width}
         height={height}
-        alt={alt} />
-  </div>
+        alt={alt}
+      />
+    </div>
   );
 }
 
-export default Header;
+export default Photo;

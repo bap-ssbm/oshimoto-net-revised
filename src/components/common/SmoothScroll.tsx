@@ -1,37 +1,39 @@
-'use client'
+'use client';
+
 import ReactLenis from '@studio-freight/react-lenis';
 import { useEffect, useState } from 'react';
 import Cursor from './Cursor/Cursor';
 
 interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-function SectionLayout({children,  ...props}: Props) {
-    const [windowWidth, setWindowWidth] = useState(0);
+function SectionLayout({ children, ...props }: Props) {
+  const [mounted, setMounted] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
 
-    useEffect(() => {
-        setWindowWidth(window.innerWidth);
+  useEffect(() => {
+    setMounted(true);
+    setWindowWidth(window.innerWidth);
 
-      function handleResize() {
-        setWindowWidth(window.innerWidth);
-      }
-  
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, []);
-  
-   
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (!mounted) return null; // Avoid hydration mismatch
+
   return (
     <>
-    {(windowWidth>768)?
-      (<ReactLenis root >
-        <Cursor/>
-        {children}
-        </ReactLenis>):
-      ( <div>
-            {children}
-        </div>)}
+      {windowWidth > 768 ? (
+        <ReactLenis root>
+          <Cursor />
+          {children}
+        </ReactLenis>
+      ) : (
+        <div>{children}</div>
+      )}
     </>
   );
 }

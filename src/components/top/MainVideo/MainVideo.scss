@@ -1,3 +1,12 @@
 .mainVideo {
+    filter: grayscale(100);
+    transition: filter 3s ease, clip-path 3.8s cubic-bezier(.38,.19,.12,.98);
+    clip-path: polygon(0% 0%, 25% 0%, 25% 25%, 0% 25%);
     
+
+
+    &.is-load {
+        filter: grayscale(0);
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
 }

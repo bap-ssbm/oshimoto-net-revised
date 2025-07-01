@@ -7,15 +7,22 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-      'sp': '640px',
-      // => @media (min-width: 640px) { ... }
-
-      'pc': '768px',
-      // => @media (min-width: 1024px) { ... }
-
-      'dt': '1280px',
-      // => @media (min-width: 1280px) { ... }
+    screens: require("./tailwind.conf/screens"),
+    spacing: require("./tailwind.conf/spacing"),
+    maxWidth: require("./tailwind.conf/spacing"),
+    fontSize: require("./tailwind.conf/fontSize"),
+    letterSpacing: require("./tailwind.conf/letterSpacing"),
+    lineHeight: require("./tailwind.conf/lineHeight"),
+    keyframes: require("./tailwind.conf/keyframes"),
+    animation: require("./tailwind.conf/animations"),
+    borderRadius: require("./tailwind.conf/borderRadius"),
+    fontWeight: {
+      300: 300,
+      400: 400,
+      500: 500,
+      600: 600,
+      700: 700,
+      900: 900,
     },
     extend: {
       fontSize: {
@@ -28,6 +35,17 @@ const config: Config = {
         '8xl': ['96px', '1' ],
         '9xl': ['128px', '1' ]
       },
+    },
+    zIndex: {
+      "-1": "-1",
+      1: "1",
+      2: "2",
+      3: "3",
+      10: "10",
+      50: "50",
+      100: "100",
+      150: "150",
+      1000: "1000",
     },
   },
   plugins: [],

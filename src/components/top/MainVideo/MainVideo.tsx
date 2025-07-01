@@ -14,22 +14,36 @@ const texts = {
 
 function MainVideo() {
     gsap.registerPlugin(ScrollTrigger as gsap.GSAPConfig)
+    const internalRef = useRef(null);
 
-    useGSAP(() => {
-        
-        
-    })
     useEffect(()=> {
-          if (document.readyState === "complete") {
-            document.querySelector('.hero')?.classList.add('is-animate');
-          } else {
-            document.querySelector('.hero')?.classList.add('is-animate');
-          }
+      if(internalRef.current) {
+        const $elm = internalRef.current as HTMLDivElement,
+          $videoElm = $elm.querySelector('#video') as HTMLVideoElement;
+        const loadHandler = () => {
+          $elm.classList.add('is-load');
+            $videoElm.play().then(() => {
+
+            console.log('video played');
+          }).catch((e: Error) => {
+            console.log(e);
+          })
+        }
+        
+        if (document.readyState === "complete") {
+                loadHandler()
+            } else {
+              window.addEventListener('load', () => {
+                   loadHandler();
+              });
+            }
+      }
+     
     }, [])
 
    
   return (
-    <div className='mainVideo pc:w-[40%] pc:max-w-[500px] w-full'>
+    <div ref={internalRef} className='mainVideo overflow-hidden h-auto pc:max-w-400 sp:max-w-300'>
        <video id='video' className='object-cover w-full right-0 opacity-70 ' autoPlay playsInline muted loop preload='auto'>
             <source src="/videos/video-hero.mp4" type="video/mp4" />
             Your browser does not support the video tag.
