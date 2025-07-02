@@ -1,0 +1,96 @@
+---
+import Img from '@/components/atoms/Img.astro';
+import Pic from '@/components/molecules/Pic.astro';
+import type { ImageMetadata } from 'astro';
+import type { saiProps } from '@/types/CommonProps';
+
+interface LayoutOptions {
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  objectPosition?: string;
+}
+
+export interface Props {
+  caption?: string;
+  captionColor?: 'white' | 'black' | 'shadow';
+  captionPosition?: 'capIn' | 'capOut' | 'capInLeft' | 'capOutLeft';
+  className?: string;
+  imageClass?: string;
+  src?: string | ImageMetadata;
+  sp?: string | ImageMetadata;
+  pc?: string | ImageMetadata;
+  loading?: 'lazy' | 'eager';
+  captionClass?: string;
+  alt: string;
+  layout?: LayoutOptions;
+  sai?: saiProps;
+}
+
+const {
+  caption,
+  captionColor = 'white',
+  captionPosition = 'capIn',
+  className = '',
+  imageClass = '',
+  src,
+  sp,
+  pc,
+  loading = 'lazy',
+  captionClass = '',
+  alt,
+  layout = {},
+  sai,
+} = Astro.props;
+
+const isPic = sp && pc;
+
+const imageBaseClass = `${imageClass} ${layout.objectFit !== 'none' ? `object-${layout.objectFit}` : ''}`;
+
+const getCaptionColorClass = (color: Props['captionColor']) => {
+  switch (color) {
+    case 'white':
+      return 'text-white';
+    case 'black':
+      return 'text-main';
+    case 'shadow':
+      return 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]';
+    default:
+      return 'text-white';
+  }
+};
+
+const getCaptionPositionClass = (position: Props['captionPosition']) => {
+  switch (position) {
+    case 'capIn':
+      return 'bottom-0 absolute right-0 bg-white/2 backdrop-blur-sm';
+    case 'capOut':
+      return 'block relative text-right';
+    case 'capInLeft':
+      return 'bottom-0 absolute left-0 bg-white/2 backdrop-blur-sm';
+    case 'capOutLeft':
+      return 'block relative text-left';
+    default:
+      return 'bottom-0 absolute right-0';
+  }
+};
+
+const captionColorClass = getCaptionColorClass(captionColor);
+const captionPositionClass = getCaptionPositionClass(captionPosition);
+---
+
+<div class={`relative ${className}`}>
+  {
+    isPic ? (
+      <Pic className={`${imageBaseClass}`} sp={sp} pc={pc} loading={loading} alt={alt} layout={layout} {...sai} />
+    ) : (
+      src && <Img className={`${imageBaseClass}`} src={src} loading={loading} alt={alt} {...sai} layout={layout} />
+    )
+  }
+  {
+    caption && (
+      <div
+        class={`px-8 py-5 font-serif-jp text-10 tracking-0 ${captionClass} ${captionColorClass} ${captionPositionClass}`}
+        set:html={caption}
+      />
+    )
+  }
+</div>

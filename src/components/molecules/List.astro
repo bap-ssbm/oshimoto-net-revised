@@ -1,0 +1,22 @@
+---
+export interface Props {
+  items: string[];
+  modifier?: string;
+  areaLabel?: string;
+}
+
+const { items, modifier, areaLabel = '' } = Astro.props;
+
+const listClass = `list ${modifier ? `list--${modifier}` : ''}`.trim();
+---
+
+<ul class={listClass} aria-label={areaLabel}>
+  {items.map((item) => <li class='list__item'>{item}</li>)}
+</ul>
+<style>
+  .list {
+    &__item {
+      position: relative;
+    }
+  }
+</style>

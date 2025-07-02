@@ -1,0 +1,81 @@
+---
+import type { saiProps } from '@/types/CommonProps';
+import type { ImageMetadata } from 'astro';
+import Heading from '@/components/atoms/Heading.astro';
+import Img from '@/components/atoms/Img.astro';
+import Button from '@/components/atoms/Button.astro';
+interface ImgProp {
+  src: string | ImageMetadata;
+  className?: string;
+  loading?: 'lazy' | 'eager';
+  alt: string;
+  modifier?: string;
+  sai?: saiProps;
+}
+
+export interface Props {
+  ttl: string;
+  text: string;
+  infoList: string[];
+  img: ImgProp;
+  hpLink?: string;
+  reserveLink?: string;
+  className?: string;
+}
+
+const { className = '', ttl, text, infoList, img, hpLink, reserveLink } = Astro.props;
+---
+
+<div
+  class={`${className} pc:w-540 sp:w-300 h-full flex bg-white border border-solid flex-col border-darkGray2 pc:p-40 sp:p-24`}>
+  <Img className='w-full' {...img} />
+  <div class='pc:mt-40 sp:mt-24'>
+    <Heading
+      level={3}
+      text={ttl}
+      className='font-serif-jp tracking-10 pc:text-24 pc:leading-15 sp:text-18 sp:leading-15'
+    />
+    <p
+      set:html={text}
+      class='font-400 text-darkGray1 pc:mt-16 pc:text-14 pc:leading-18 pc:tracking-7 sp:mt-12 sp:text-14 sp:leading-18'
+    />
+  </div>
+  <div class='flex w-full grow items-end pc:mt-40 sp:mt-24'>
+    <ul class='flex w-full flex-col gap-8'>
+      {
+        infoList.map((item) => (
+          <li
+            class='relative pb-8 font-sans-jp font-400 text-main after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:bg-lightGray1 pc:text-14 pc:leading-15 pc:tracking-7 sp:text-12 sp:leading-15 sp:tracking-6'
+            set:html={item}
+          />
+        ))
+      }
+    </ul>
+  </div>
+  {
+    (hpLink || reserveLink) && (
+      <div class='flex justify-center pc:mt-32 pc:gap-16 sp:mt-28 sp:gap-8'>
+        {hpLink && (
+          <Button
+            className='sp:w-122 sp:h-40 pc:w-208 pc:h-48 border border-solid border-gray1'
+            tag='a'
+            target='_blank'
+            text='公式サイト'
+            href={hpLink}
+            color='white'
+          />
+        )}
+        {reserveLink && (
+          <Button
+            className='sp:w-122 sp:h-40 pc:w-208 pc:h-48 !bg-[#393A4B]'
+            tag='a'
+            target='_blank'
+            text='来場予約'
+            href={reserveLink}
+            color='black'
+          />
+        )}
+      </div>
+    )
+  }
+</div>

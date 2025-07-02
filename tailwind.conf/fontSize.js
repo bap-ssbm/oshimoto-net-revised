@@ -5,10 +5,10 @@ for (let i = 1; i <= 100; i++) {
 module.exports = {
   ...fontSizeSetting,
   base: [
-    "1.6rem",
+    '1.6rem',
     {
-      letterSpacing: "0",
-      lineHeight: "1",
+      letterSpacing: '0',
+      lineHeight: '1',
     },
   ],
 };

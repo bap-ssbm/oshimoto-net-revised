@@ -1,0 +1,52 @@
+---
+interface Props {
+  pageId: string;
+}
+
+const { pageId } = Astro.props;
+---
+
+<button
+  id='menuTrigger'
+  aria-label='グローバルメニューを開く/閉じる'
+  aria-controls='globalMenu'
+  aria-expanded='false'
+  class={`menuTrigger bg-transparent pc:py-5 sp:py-8 pc:mix-blend-difference z-1000 pc:top-56 sp:top-31 pc:right-40 sp:right-32 sp:!pointer-events-auto fixed sp: cursor-pointer flex shrink-0 flex-col items-center justify-between pc:h-27 pc:w-40 sp:h-20 sp:w-22 ${pageId === 'top' ? '' : '!opacity-100 !pointer-events-auto'}`}>
+  <span
+    class={`relative  block h-[1px] pc:mix-blend-difference w-full origin-top-left pc:bg-white sp:bg-main transition-transform duration-300 -translate-y-2`}
+  ></span>
+  <span
+    class={`relative block h-[1px] w-full pc:mix-blend-difference origin-bottom-left pc:bg-white sp:bg-main transition-transform duration-300 translate-y-2`}
+  ></span>
+</button>
+
+<style lang='scss' is:global>
+  .menuTrigger {
+    &.is-active {
+      mix-blend-mode: unset;
+      span {
+        @include sp {
+          background-color: #fff !important;
+          mix-blend-mode: unset;
+        }
+        &:first-child {
+          @include pc {
+            transform: translateY(0.1rem) rotate(21deg);
+          }
+          @include sp {
+            transform: translateY(-0.22rem) rotate(21deg);
+          }
+        }
+
+        &:nth-child(2) {
+          @include pc {
+            transform: translateY(-0.1rem) rotate(-21deg);
+          }
+          @include sp {
+            transform: translateY(0.22rem) rotate(-21deg);
+          }
+        }
+      }
+    }
+  }
+</style>

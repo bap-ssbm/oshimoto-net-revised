@@ -1,0 +1,175 @@
+---
+import Img from '@/components/atoms/Img.astro';
+import Pic from '@/components/molecules/Pic.astro';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata | string;
+  sp?: ImageMetadata | string;
+  pc?: ImageMetadata | string;
+  loading?: 'lazy' | 'eager';
+  alt: string;
+  caption?: {
+    text?: string;
+    position?: 'capIn' | 'capOut' | 'capInLeft' | 'capOutLeft';
+    color?: 'black' | 'white' | 'sdw_wh' | 'sdw_bl';
+    captionClass?: string;
+  };
+  modifier?: string;
+  speed?: number;
+  scale?: number;
+  className: string;
+}
+
+const {
+  src,
+  sp,
+  pc,
+  loading = 'lazy',
+  alt,
+  caption,
+  modifier,
+  speed = 0.2,
+  scale = 1.2,
+  className = '',
+} = Astro.props;
+
+const isPic = sp && pc;
+
+const captionPosition = caption?.position || 'capIn';
+const captionColor = caption?.color || 'grey';
+
+const getCaptionClass = () => {
+  switch (caption?.color) {
+    case 'white':
+      return 'text-white';
+    case 'black':
+      return 'text-main';
+    case 'sdw_wh':
+      return 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]';
+    case 'sdw_bl':
+      return 'text-black drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]';
+    default:
+      return 'text-white';
+  }
+};
+
+const getCaptionPositionClass = () => {
+  switch (caption?.position) {
+    case 'capIn':
+      return 'bottom-0 absolute right-0 bg-white/2 backdrop-blur-sm';
+    case 'capOut':
+      return 'block relative text-right';
+    case 'capInLeft':
+      return 'bottom-0 absolute left-0 bg-white/2 backdrop-blur-sm';
+    case 'capOutLeft':
+      return 'block relative text-left';
+    default:
+      return 'bottom-0 absolute right-0';
+  }
+};
+
+const captionClass = getCaptionClass();
+const captionPositionClass = getCaptionPositionClass();
+---
+
+<div
+  class={`${className} parallaxPhoto${modifier ? ` parallaxPhoto--${modifier}` : ''} js-parallax-container`}
+  data-speed={speed}
+  data-scale={scale}>
+  {isPic ? <Pic sp={sp} pc={pc} loading={loading} alt={alt} /> : src && <Img src={src} loading={loading} alt={alt} />}
+  {
+    caption && (
+      <p
+        class={`px-8 py-5 font-serif-jp text-10 tracking-0 ${captionClass} ${captionPositionClass} ${caption.captionClass}`}
+        set:html={caption.text}
+      />
+    )
+  }
+</div>
+
+<script>
+  class ParallaxEffect {
+    container: HTMLElement;
+    image: HTMLElement;
+    speed: number;
+    scale: number;
+    observer: IntersectionObserver;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.image = container.querySelector('img') as HTMLElement;
+      this.speed = parseFloat(container.dataset.speed || '0.2');
+      this.scale = parseFloat(container.dataset.scale || '1.2');
+      this.applyInitialScale();
+
+      this.observer = new IntersectionObserver(this.handleIntersection.bind(this), {
+        threshold: 0,
+      });
+      this.observer.observe(this.container);
+    }
+
+    private applyInitialScale() {
+      this.image.style.transform = `scale(${this.scale})`;
+    }
+
+    private handleIntersection(entries: IntersectionObserverEntry[]) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          this.addEventListeners();
+          this.update();
+        } else {
+          this.removeEventListeners();
+        }
+      });
+    }
+
+    private addEventListeners() {
+      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('resize', this.handleScroll);
+    }
+
+    private removeEventListeners() {
+      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('resize', this.handleScroll);
+    }
+
+    private handleScroll = () => {
+      requestAnimationFrame(this.update.bind(this));
+    };
+
+    private update() {
+      const rect = this.container.getBoundingClientRect();
+      const scrollPercentage = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+
+      if (scrollPercentage >= 0 && scrollPercentage <= 1) {
+        const moveDistance = rect.height * (this.scale - 1);
+        const yPosition = moveDistance * (0.5 - scrollPercentage) * this.speed;
+        this.image.style.transform = `translate3d(0, ${yPosition}px, 0) scale(${this.scale})`;
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.js-parallax-container');
+    containers.forEach((container) => new ParallaxEffect(container as HTMLElement));
+  });
+</script>
+<style lang='scss' is:global>
+  .parallaxPhoto {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    // サイズmodifier例
+    &--full {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    &--half {
+      height: 50vh;
+      width: 100%;
+    }
+  }
+</style>

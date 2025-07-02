@@ -1,0 +1,55 @@
+---
+import type { saiProps } from '@/types/CommonProps';
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+
+export interface Props {
+  id?: string;
+  tag?: 'span' | 'p' | 'div';
+  className?: string;
+  type?: string;
+  modifier?: string;
+  sai?: saiProps;
+}
+
+const { id, tag = 'p', className = 'txt', type, modifier, sai } = Astro.props;
+
+const Tag = tag as HTMLTag;
+const textClass = `${className} ${modifier ? `${className}--${modifier} ` : ''} ${type ? `${type} ` : ''}`.trim();
+
+const saiAttributes = sai
+  ? {
+      'data-sai': sai.styles,
+      ...(sai.offset !== undefined && {
+        'data-sai-offset': sai.offset.toString(),
+      }),
+      ...(sai.delay !== undefined && {
+        'data-sai-delay': sai.delay.toString(),
+      }),
+      ...(sai.easing !== undefined && { 'data-sai-easing': sai.easing }),
+      ...(sai.duration !== undefined && {
+        'data-sai-duration': sai.duration.toString(),
+      }),
+      ...(sai.once !== undefined && { 'data-sai-once': sai.once.toString() }),
+    }
+  : {};
+---
+
+<Tag id={id} class={textClass} {...saiAttributes}>
+  <slot />
+</Tag>
+<style lang='scss' is:global>
+  .txt {
+    sup {
+      font-size: 0.5em;
+      line-height: 1;
+      vertical-align: super;
+    }
+  }
+  .caption {
+    color: #999;
+    font-size: 1rem;
+    letter-spacing: 0;
+
+    @include lhCrop(1.5);
+  }
+</style>

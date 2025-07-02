@@ -1,0 +1,16 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<a class={`${className} flex items-center gap-16`} href='../'>
+  <span class='pc:w-42 sp:w-42'>
+    <svg xmlns='http://www.w3.org/2000/svg' class='w-full' width='42' height='7' viewBox='0 0 42 7' fill='none'>
+      <path d='M41.5117 6.28504L1.36469 6.28504M7.1772 1.08328L1.00073 6.47217' stroke='#363231'></path>
+    </svg>
+  </span>
+  <span class='font-en font-400 leading-10 tracking-0 text-black pc:text-20 sp:text-16'>TOP PAGE</span>
+</a>

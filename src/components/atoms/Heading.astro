@@ -1,0 +1,42 @@
+---
+import type { saiProps } from '@/types/CommonProps';
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+
+export interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  text: string;
+  id?: string;
+  className?: string;
+  modifier?: string;
+  sai?: saiProps;
+}
+
+const { level = 1, text, className = 'heading', modifier, sai } = Astro.props;
+
+const Tag = `h${level}` as HTMLTag;
+const headingClass = `${className} ${modifier ? `${className}--${modifier}` : ''}`.trim();
+
+const saiAttributes = sai
+  ? {
+      'data-sai': sai.styles,
+      ...(sai.offset !== undefined && {
+        'data-sai-offset': sai.offset.toString(),
+      }),
+      ...(sai.delay !== undefined && {
+        'data-sai-delay': sai.delay.toString(),
+      }),
+      ...(sai.easing !== undefined && { 'data-sai-easing': sai.easing }),
+      ...(sai.duration !== undefined && {
+        'data-sai-duration': sai.duration.toString(),
+      }),
+      ...(sai.once !== undefined && { 'data-sai-once': sai.once.toString() }),
+    }
+  : {};
+---
+
+<Tag class={headingClass} set:html={text} {...saiAttributes} />
+
+<style lang='scss'>
+  .heading {
+  }
+</style>

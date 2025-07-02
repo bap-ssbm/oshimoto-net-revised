@@ -1,0 +1,19 @@
+---
+export interface Props {
+  tag?: 'section' | 'div';
+  id?: string;
+  className?: string;
+}
+
+const { tag = 'section', id, className } = Astro.props;
+
+const Tag = tag;
+const attributes = {
+  ...(className ? { class: `${className}`.trim() } : {}),
+  ...(id ? { id } : {}),
+};
+---
+
+<Tag {...attributes}>
+  <slot />
+</Tag>

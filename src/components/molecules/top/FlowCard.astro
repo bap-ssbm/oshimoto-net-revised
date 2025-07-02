@@ -1,0 +1,63 @@
+---
+import type { saiProps } from '@/types/CommonProps';
+import type { ImageMetadata } from 'astro';
+import Heading from '@/components/atoms/Heading.astro';
+import Img from '@/components/atoms/Img.astro';
+import type { Props as ImgProp } from '@/components/atoms/Img.astro';
+import ImageWithCaption from '@/components/atoms/ImageWithCaption.astro';
+import type { Props as ImageWithCaptionProps } from '@/components/atoms/ImageWithCaption.astro';
+
+interface Props {
+  num: string;
+  desc: {
+    ttl: string;
+    text: string;
+    caption?: string;
+  };
+  imgCaption?: string;
+  mainImg: ImageWithCaptionProps;
+  imgList: ImageWithCaptionProps[];
+  className?: string;
+}
+
+const { className = '', desc, num, mainImg, imgList, imgCaption } = Astro.props;
+---
+
+<div class={`${className} pc:h-screen pc:flex pc:w-fit pc:items-center pc:min-h-720 `}>
+  <div class='pc:flex pc:h-720 pc:w-400 pc:flex-col pc:pt-72 sp:px-32 sp:py-56' data-sai='fade'>
+    <div
+      class='relative w-full after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:w-full after:bg-lightGray1 pc:pb-24 sp:pb-24'>
+      <span
+        class='absolute font-400 leading-18 tracking-4 text-gray1 pc:bottom-[calc(100%+1.8rem)] pc:left-0 pc:text-8 sp:bottom-[calc(100%+1rem)] sp:text-8'
+        >FLOW</span
+      >
+      <span class='block font-en leading-10 tracking-10 text-gray1 pc:text-40 sp:text-40'>{num}</span>
+    </div>
+    <div class='mt-24'>
+      <Heading
+        level={3}
+        text={desc.ttl}
+        className='font-serif-jp tracking-10 pc:text-18 pc:leading-15 sp:text-16 sp:leading-20'
+      />
+      <p
+        set:html={desc.text}
+        class='w-full whitespace-normal break-words font-400 text-darkGray1 pc:mt-24 pc:text-14 pc:leading-18 pc:tracking-7 sp:mt-24 sp:text-13 sp:leading-18'
+      />
+      {desc.caption && (
+        <p class='mt-24 text-10 tracking-2 text-darkGray1' set:html={desc.caption} />
+      )}
+    </div>
+    <div class='flex items-end justify-between pc:mt-auto sp:mt-24' data-sai='fade-up'>
+      {
+        imgList.map((img) => (
+          <div>
+            <ImageWithCaption {...img} />
+          </div>
+        ))
+      }
+    </div>
+    {imgCaption && <p class='mt-10 text-10 tracking-2 text-darkGray1 sp:hidden' set:html={imgCaption} />}
+  </div>
+  <ImageWithCaption className='pc:hidden sp:w-full' {...mainImg} sai={{ styles: 'fade' }} />
+  {imgCaption && <p class='mt-10 text-10 tracking-2 text-darkGray1 pc:hidden' set:html={imgCaption} />}
+</div>

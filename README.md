@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# bkn_500-252_mita-lounge
 
-## Getting Started
+# BKN Prototype
 
-First, run the development server:
+## 環境要件
+
+- Node.js (推奨: 最新のLTS版)
+- Yarn v4.4.0
+
+## 環境構築
+
+### 1. パッケージマネージャーの準備
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# yarnの最新版をインストール
+corepack enable
+yarn set version 4.4.0
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. プロジェクトのセットアップ
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# リポジトリをクローン
+git clone [リポジトリURL]
+cd bkn_prototype
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# 依存パッケージのインストール
+yarn install
+```
 
-## Learn More
+### 3. 開発サーバーの起動
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# ローカル環境で起動
+yarn dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# ネットワーク経由でアクセス可能な開発サーバーを起動
+yarn devh
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 開発用コマンド
 
-## Deploy on Vercel
+### 基本コマンド
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# 開発サーバー起動
+yarn dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# ビルド
+yarn build
+
+# ビルド結果のプレビュー
+yarn preview
+
+# 型チェック
+yarn astro check
+```
+
+### コード品質管理
+
+```bash
+# フォーマット
+yarn format  # Prettier + Stylelintによる自動フォーマット
+
+# リント
+yarn lint    # ESLint + Stylelintによるコード検証
+
+# 自動修正
+yarn fix     # ESLint, Stylelint, Prettierによる自動修正
+```
+
+### テスト
+
+```bash
+# テストの実行
+yarn test
+
+# テストの監視モード
+yarn test:watch
+```
+
+## 主要な依存パッケージ
+
+- [Astro](https://astro.build/) - Webフレームワーク
+- [TypeScript](https://www.typescriptlang.org/) - 型システム
+- [GSAP](https://greensock.com/gsap/) - アニメーション
+- [Lenis](https://github.com/studio-freight/lenis) - スムーススクロール
+- [Vitest](https://vitest.dev/) - テストフレームワーク
+
+## フォント
+
+以下のフォントが利用可能です：
+
+- Noto Sans JP (Variable)
+- Noto Serif JP (Variable)
+- EB Garamond
+- Shippori Mincho
+- YakuhanJP
+- YakuhanMP
+
+## ライセンス
+
+UNLICENSED - 社内利用限定
+
+## 作者
+
+Daiki Nojima

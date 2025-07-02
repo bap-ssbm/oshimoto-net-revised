@@ -1,0 +1,132 @@
+---
+import LineupCard, { type Props as LineupCardProps } from '@/components/molecules/top/LineupCard.astro';
+import Arrow from '@/components/atoms/Arrow.astro';
+
+interface Props {
+  className: string;
+  list: LineupCardProps[];
+  spOnly?: boolean;
+}
+
+const { className, list, spOnly = false } = Astro.props;
+
+const baseClass = `lineupSlider js-lineupSliderWrapper relative ${spOnly ? 'spOnly' : ''}`;
+const combinedClass = className ? `${baseClass} ${className}` : baseClass;
+---
+
+<div class={combinedClass} data-sai='fade-up'>
+  <div class='swiper js-lineupSlider' aria-label='ラインアップのスライダー'>
+    <swiper-container class='swiper-wrapper pc:gap-40 sp:gap-16'>
+      {
+        list.map((item, index) => (
+          <swiper-slide
+            class={`swiper-slide !h-auto !w-fit pb-1 ${index === 0 ? 'pc:pl-160 sp:pl-32' : ''} ${index === list.length - 1 ? 'pc:pr-320 sp:pr-90' : ''}`}
+            role='group'
+            aria-roledescription='slide'>
+            <LineupCard {...item} />
+          </swiper-slide>
+        ))
+      }
+    </swiper-container>
+  </div>
+  <div class={`pointer-events-auto mx-auto flex w-fit items-center sp:mt-14${spOnly ? ' pc:hidden' : ''}`}>
+    <button
+      aria-label='previous slide'
+      class='lineupSlider__icon js-slider-prev flex h-full shrink-0 flex-grow cursor-pointer items-center py-10 pc:px-44 pc:py-40 sp:px-48'>
+      <Arrow color='black' />
+    </button>
+
+    <button
+      aria-label='next slide'
+      class='lineupSlider__icon js-slider-next items-centerpc:py-40 flex h-full shrink-0 flex-grow cursor-pointer justify-end py-10 pc:px-44 pc:py-40 sp:px-48'>
+      <Arrow color='black' className='rotate-180' />
+    </button>
+  </div>
+</div>
+<script>
+  import { _breakP } from '@/scripts/utils.ts';
+  import Swiper from 'swiper';
+  import 'swiper/css/bundle';
+
+  const swiperElementsArray = document.querySelectorAll<HTMLElement>('.js-lineupSliderWrapper');
+  swiperElementsArray.forEach((swiperElementWrapper, index) => {
+    const swiperElement = swiperElementWrapper.querySelector<HTMLElement>('.js-lineupSlider');
+    if (swiperElement) {
+      const uniqueId = `lineupSlider-${index + 1}`;
+      swiperElement.id = uniqueId;
+
+      const prevButton = swiperElementWrapper?.querySelector<HTMLElement>('.js-slider-prev');
+      const nextButton = swiperElementWrapper?.querySelector<HTMLElement>('.js-slider-next');
+
+      let slineUpSwiper: any;
+
+      function initSlider() {
+        slineUpSwiper = new Swiper(swiperElement ? swiperElement : '', {
+          effect: 'slide',
+          loop: false,
+          autoplay: false,
+          spaceBetween: _breakP.PC ? '4rem' : '1.6rem',
+          slidesPerView: 'auto',
+          preventInteractionOnTransition: true,
+          simulateTouch: true,
+          allowTouchMove: true,
+          grabCursor: true,
+          speed: 1500,
+          loopAddBlankSlides: true,
+          pagination: false,
+          watchSlidesProgress: true,
+          observer: true,
+          observeParents: true,
+          resizeObserver: true,
+        });
+
+        prevButton?.addEventListener('click', () => slineUpSwiper.slidePrev());
+        nextButton?.addEventListener('click', () => slineUpSwiper.slideNext());
+
+        // Remove manual event listeners since navigation will be handled by Swiper
+        updateNavigationState();
+
+        slineUpSwiper.on('slideChange', updateNavigationState);
+        slineUpSwiper.on('resize', updateNavigationState);
+        slineUpSwiper.on('observerUpdate', updateNavigationState);
+
+        function updateNavigationState() {
+          const isBeginning = slineUpSwiper.isBeginning;
+          const isEnd = slineUpSwiper.isEnd;
+
+          if (prevButton) {
+            prevButton.style.opacity = isBeginning ? '0.3' : '1';
+          }
+          if (nextButton) {
+            nextButton.style.opacity = isEnd ? '0.3' : '1';
+          }
+        }
+      }
+      document.addEventListener('DOMContentLoaded', () => {
+        initSlider();
+      });
+    }
+  });
+</script>
+<style is:global lang='scss'>
+  .lineupSlider {
+  }
+
+  .js-pageTone-color-black .lineupSlider__icon {
+    border: 1px solid #4d4945;
+    background: #403326;
+  }
+  .js-pageTone-color-white .lineupSlider__icon,
+  .js-pageTone-color-tan .lineupSlider__icon {
+    border: 1px solid #d9cec3;
+    background: #fff;
+  }
+
+  .js-pageTone-color-black .lineupSlider__current {
+    color: #fff;
+  }
+  .js-pageTone-color-white .lineupSlider__current,
+  .js-pageTone-color-tan .lineupSlider__current {
+    color: #333;
+  }
+</style>

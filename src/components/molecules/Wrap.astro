@@ -1,0 +1,25 @@
+---
+export interface Props {
+  modifier?: string;
+  areaLabel?: string;
+}
+
+const { modifier, areaLabel = '' } = Astro.props;
+
+const WrapClass = `wrap ${modifier ? `wrap--${modifier}` : ''}`.trim();
+---
+
+<div class={WrapClass}>
+  <slot />
+</div>
+<style lang='scss' is:global>
+  .wrap {
+    @include pc {
+      margin: 0 auto;
+      width: 120rem;
+    }
+    @include sp {
+      padding: 0 3.2rem;
+    }
+  }
+</style>

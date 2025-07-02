@@ -1,0 +1,155 @@
+---
+import Img from '@/components/atoms/Img.astro';
+import ftrLinksInitia from '@/assets/imgs/common/ftr-Links-INITIA.svg';
+import ftrLinks01 from '@/assets/imgs/common/ftr-links-01.jpg';
+import ftrLinks02 from '@/assets/imgs/common/ftr-links-02.jpg';
+import ftrLinks03 from '@/assets/imgs/common/ftr-links-03.jpg';
+import ftrLinks04 from '@/assets/imgs/common/ftr-links-04.jpg';
+import moreArr from '@/assets/imgs/common/ftr-links-more-arr.png';
+import ftrLinksSatei from '@/assets/imgs/common/ftr-links-satei.svg';
+import taiyou01 from '@/assets/imgs/common/taiyou-01.svg';
+import ftrCompanyInitia from '@/assets/imgs/common/ftr-company-initia.svg';
+
+interface Props {
+  pageId?: string;
+  caption?: string;
+}
+
+const { pageId, caption } = Astro.props;
+---
+
+<footer class='font-matisse text-sm leading-normal font-feature-settings-palt bg-white tracking-12 text-[#333]'>
+  {
+    caption && (
+      <div class='relative mx-auto px-5 after:absolute after:bottom-0 after:left-0 after:block after:h-[1px] after:w-full after:bg-[#5a5a5a] after:content-[""] pc:w-1000 pc:py-60 sp:w-342 sp:py-32'>
+        <p
+          class='font-sans-jp font-400 text-[#999] pc:text-10 pc:leading-18 sp:text-10 sp:leading-18'
+          set:html={caption}
+        />
+      </div>
+    )
+  }
+  <section class='border-t-3 border-[#221815] text-center pc:py-60 sp:py-40' id='conversion'>
+    <div class='mx-auto max-w-1000 px-5'>
+      <h3 class='font-normal text-13 tracking-15'>お問い合わせはイニシアラウンジ三田</h3>
+      <h3 class='font-normal mt-5 text-13 tracking-15'>
+        <a href='tel:0120124801' class='md:pointer-events-auto pointer-events-none text-13 text-[#333] no-underline'>
+          0120-1248-01
+        </a>
+      </h3>
+      <p class='text-10 leading-18 tracking-15 pc:mt-20 sp:mt-20'>
+        営業時間:平日11:00～18:00 土日祝 10:00～18:00
+        <br />
+        定休日:火・水・木曜日定休（祝日は営業）
+        <br />
+        （夏季・年末年始休暇あり）
+        <br />
+        携帯電話からもご利用いただけます。
+      </p>
+    </div>
+  </section>
+
+  <section class='w-full overflow-hidden bg-[#262626]' id='ftrLinks'>
+    <div class='mx-auto max-w-1000 pc:px-5 sp:px-20'>
+      <div class='group py-20' style='border-bottom: 1px dotted #5a5a5a;'>
+        <div class='items-start justify-between pc:flex'>
+          <div class='flex flex-col'>
+            <h3 class='leading-none'>
+              <a href='https://www.cigr.co.jp/pj/contents/search/' target='_blank' class='block sp:w-116'>
+                <Img src={ftrLinksInitia} alt='INITIA 住まい探し総合サイト' />
+              </a>
+            </h3>
+            <div class='mt-5'>
+              <a
+                href='https://www.cigr.co.jp/pj/contents/search/'
+                target='_blank'
+                class='relative inline-block rounded-2 bg-[#4d4d4d] px-19 font-hiragino text-12 leading-15 text-white no-underline transition-colors duration-300 hover:bg-[#999]'>
+                <Img src={moreArr} alt='more' className='absolute left-5 top-1/2 w-5 -translate-y-1/2' />
+                more
+              </a>
+            </div>
+          </div>
+          <div class='overflow-hidden pc:w-620'>
+            <ul class='flex flex-wrap gap-10 sp:mt-10'>
+              <li class='bg-white sp:w-110'>
+                <a
+                  href='https://www.cigr.co.jp/pj/contents/search/result/?kind=1201'
+                  target='_blank'
+                  class='block transition-opacity duration-300 hover:opacity-80'>
+                  <Img src={ftrLinks01} alt='一戸建物件' className='pc:w-200' />
+                </a>
+              </li>
+              <li class='bg-white sp:w-110'>
+                <a
+                  href='https://www.cigr.co.jp/pj/contents/renovation/'
+                  target='_blank'
+                  class='block transition-opacity duration-300 hover:opacity-80'>
+                  <Img src={ftrLinks02} alt='リノベーション' className='pc:w-200' />
+                </a>
+              </li>
+              <li class='bg-white sp:w-110'>
+                <a
+                  href='https://www.cigr.co.jp/pj/chuko/?ftstg=chuko'
+                  target='_blank'
+                  class='block transition-opacity duration-300 hover:opacity-80'>
+                  <Img src={ftrLinks03} alt='中古物件' className='pc:w-200' />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class='py-20'>
+        <div class='items-start justify-between pc:flex'>
+          <div class='flex flex-col'>
+            <h3 class='leading-none'>
+              <a href='https://www.cigr.co.jp/cstg/index.html' target='_blank' class='block'>
+                <Img src={ftrLinksSatei} alt='コスモスイニシアの売却査定' className='w-177' />
+              </a>
+            </h3>
+            <div class='mt-5'>
+              <a
+                href='https://www.cigr.co.jp/cstg/index.html'
+                target='_blank'
+                class='relative inline-block rounded-2 bg-[#4d4d4d] px-19 font-hiragino text-12 leading-15 text-white no-underline transition-colors duration-300 hover:bg-[#999]'>
+                <Img src={moreArr} alt='more' className='absolute left-5 top-1/2 w-5 -translate-y-1/2' />
+                more
+              </a>
+            </div>
+          </div>
+          <div class='overflow-hidden pc:w-620'>
+            <ul class='flex flex-wrap gap-10 sp:mt-10'>
+              <li class='bg-white sp:w-110'>
+                <a
+                  href='https://www.cigr.co.jp/cstg/index.html'
+                  target='_blank'
+                  class='block transition-opacity duration-300 hover:opacity-80'>
+                  <Img src={ftrLinks04} alt='売却査定' className='pc:w-200' />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class='pc:py-25 sp:pb-40 sp:pt-25' id='group'>
+    <div class='mx-auto max-w-1000 px-10'>
+      <ul class='pl-15'>
+        <li class='mr-30 inline-block align-top last:mr-0'>
+          <a href='https://www.cigr.co.jp/' target='_blank' class='tracking-12 no-underline'>
+            <span class='block w-30 sp:w-36'>
+              <Img src={taiyou01} alt='＜売主＞' />
+            </span>
+            <Img className='mt-10 sp:w-200' src={ftrCompanyInitia} alt='コスモスイニシア' />
+          </a>
+        </li>
+      </ul>
+      <p class='font-helvetica text-10 leading-30 text-[#1f73b9] pc:mt-20 sp:py-30 sp:text-center sp:text-6'>
+        <span>COPYRIGHT COSMOS INITIA CO., LTD. ALL RIGHTS RESERVED.</span>
+      </p>
+    </div>
+  </section>
+</footer>

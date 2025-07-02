@@ -1,0 +1,78 @@
+---
+// Make this component server-side rendered instead of static
+export const prerender = false;
+
+interface IData {
+  subject: string;
+  items: {
+    title: string;
+    cat: string;
+    desc: string;
+    href: string;
+    img: string;
+  }[];
+}
+
+const params = {
+  key: new Date().getTime().toString(),
+  type: '1201,1303',
+};
+const location = Astro.url;
+const developMode = location.href.includes('https://500-252-mita-lounge.netlify.app/');
+const jsonURL = developMode
+  ? 'https://dply-cd.4digit.jp/bkn_fmt-initia-regulation/main/build/common/json/recommend.json'
+  : 'https://www.cigr.co.jp/pj/contents/search/recommends.json';
+
+const query = new URLSearchParams(params);
+const res = await fetch(`${jsonURL}?${query}`, {
+  method: 'GET',
+});
+const jsonData = await res.json();
+
+const data: IData[] = [
+  {
+    subject: '新築マンション・新築一戸建',
+    items: jsonData.new,
+  },
+  {
+    subject: 'リノベーションマンション',
+    items: jsonData.renovate,
+  },
+];
+
+const dataToShow = data.slice(0, 1);
+
+// Set cache control headers to cache for 5 minutes
+Astro.response.headers.set('Cache-Control', 'public, max-age=300');
+---
+
+<section class='sp:px-25'>
+  <ul class='flex flex-col gap-52 pc:mt-32 sp:mt-80 sp:gap-36'>
+    {
+      dataToShow.map((element) => (
+        <li>
+          <h3 class='text-20 font-400 text-main pc:text-center sp:text-16'>{element.subject}</h3>
+          <div class='mt-32 flex gap-38 pc:px-100 sp:mt-40 sp:flex-col sp:gap-32'>
+            {element.items.map((el) => (
+              <a href={el.href} target='_blank' rel='noopener noreferrer' class='group flex-1'>
+                <div class='w-full overflow-hidden'>
+                  <img
+                    src={el.img}
+                    alt={el.title}
+                    class='ease w-full duration-500 group-hover:scale-110 group-hover:opacity-80'
+                  />
+                </div>
+
+                <div class='mt-20 w-fit rounded-13 border border-solid border-gray bg-white px-9 py-3 font-sans-jp text-10 sp:mt-10'>
+                  {el.cat}
+                </div>
+                <h4 class='mt-8 font-sans-jp text-14 font-500 leading-16 sp:text-12' set:html={el.title} />
+                <p class='text-darkGray mt-3 line-clamp-3 font-sans-jp text-12 leading-20 sp:text-11'>{el.desc}</p>
+              </a>
+            ))}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -1,0 +1,116 @@
+---
+import Img from '@/components/atoms/Img.astro';
+import Text from '@/components/atoms/Text.astro';
+import Pic from '@/components/molecules/Pic.astro';
+import type { saiProps } from '@/types/CommonProps';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata;
+  sp?: ImageMetadata;
+  pc?: ImageMetadata;
+  loading?: 'lazy' | 'eager';
+  alt: string;
+  caption: {
+    text?: string;
+    position?: 'in' | 'out';
+    color?: 'black' | 'white' | 'sdw_wh' | 'sdw_bl';
+  };
+  modifier?: string;
+  sai?: saiProps;
+}
+
+const {
+  src,
+  sp,
+  pc,
+  loading = 'lazy',
+  alt,
+  caption = { text: alt, position: 'out', color: 'grey' },
+  modifier,
+  sai,
+} = Astro.props;
+
+const isPic = sp && pc;
+
+const captionPosition = caption.position || 'out';
+const captionColor = caption.color || 'grey';
+
+const getCaptionClassName = () => {
+  const baseClass = `photo__cap${captionPosition === 'in' ? 'In' : 'Out'}`;
+  const colorClass = `photo__cap--${captionColor}`;
+  return `${baseClass} ${colorClass}`;
+};
+
+const saiAttributes = sai
+  ? {
+      'data-sai': sai.styles,
+      ...(sai.offset !== undefined && {
+        'data-sai-offset': sai.offset.toString(),
+      }),
+      ...(sai.delay !== undefined && {
+        'data-sai-delay': sai.delay.toString(),
+      }),
+      ...(sai.easing !== undefined && { 'data-sai-easing': sai.easing }),
+      ...(sai.duration !== undefined && {
+        'data-sai-duration': sai.duration.toString(),
+      }),
+      ...(sai.once !== undefined && { 'data-sai-once': sai.once.toString() }),
+    }
+  : {};
+---
+
+<div class={`photo${modifier ? ` photo--${modifier}` : ''}`} {...saiAttributes}>
+  {isPic ? <Pic sp={sp} pc={pc} loading={loading} alt={alt} /> : src && <Img src={src} loading={loading} alt={alt} />}
+  <div class={getCaptionClassName()}>{caption.text}</div>
+</div>
+
+<style lang='scss' is:global>
+  .photo {
+    position: relative;
+    width: 100%;
+
+    &__capIn,
+    &__capOut {
+      display: block;
+      line-height: 1.5;
+    }
+
+    &__capIn {
+      bottom: 0;
+      padding: 0.5rem;
+      position: absolute;
+      right: 0;
+      text-align: right;
+      width: 100%;
+    }
+
+    &__capOut {
+      margin-top: 1rem;
+      text-align: right;
+    }
+
+    &__cap--grey {
+      color: #999;
+    }
+    &__cap--black {
+      color: #000;
+    }
+
+    &__cap--white {
+      color: #fff;
+    }
+
+    &__cap--sdw_wh {
+      color: #fff;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    }
+
+    &__cap--sdw_bl {
+      color: #000;
+      text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    }
+  }
+</style>
+
+<script></script>

@@ -1,0 +1,177 @@
+@import "the-new-css-reset";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* overscroll-behavior: none; */
+
+    @screen sp {
+      font-size: calc(100vw * 10 / 390);
+    }
+    @screen pc {
+      font-size: calc(100vw * 10 / 1440);
+    }
+  }
+
+  body {
+    @apply text-16 text-black;
+  }
+
+  img {
+    @apply pointer-events-none select-none;
+  }
+
+  img,
+  svg {
+    @apply h-auto w-full;
+  }
+
+  a {
+    @apply block;
+  }
+
+  *:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  @media (min-width: 768px) {
+    .bg-texture-01 {
+      @apply bg-contain bg-repeat;
+      background-image: var(--desktopImage);
+    }
+  }
+  @media (max-width: 768px) {
+    .bg-texture-01 {
+      @apply bg-contain bg-repeat;
+      background-image: var(--mobileImage);
+    }
+  }
+  .button-base {
+    @apply relative font-serif flex items-center justify-between duration-700;
+  }
+
+  .bg-gradient-b-70 {
+    background: linear-gradient(180deg, transparent 70%, #222 100%);
+  }
+  .mask-gradient-b-70 {
+    -webkit-mask-image: linear-gradient(180deg, transparent 70%, black 100%);
+    mask-image: linear-gradient(180deg, transparent 70%, black 100%);
+  }
+}
+
+@layer utilities {
+  .only-pc {
+    @apply sp:hidden;
+  }
+
+  .only-sp {
+    @apply pc:hidden;
+  }
+
+  .u-clearfix {
+    zoom: 1;
+
+  }
+
+  .u-clearfix:after {
+    clear: both;
+    content: '';
+    display: block;
+  }
+  
+  .u-vertical {
+    writing-mode: tb;
+  }
+
+  .u-vertical-tight {
+    text-orientation: upright;
+    writing-mode: tb;
+  }
+
+  .u-horizon {
+    writing-mode: horizontal-tb;
+  }
+
+  .u-bg-blur {
+    backdrop-filter: blur(10px);
+  }
+
+  .u-fit {
+    height: 100%;
+    width: 100%;
+  }
+
+  .u-fit img {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+
+  .en {
+    @apply font-en font-400;
+  }
+
+  .en-bold {
+    @apply font-en font-700;
+  }
+
+  .en-black {
+    @apply font-en font-900;
+  }
+
+
+  .noto {
+    @apply font-noto font-400;
+  }
+
+  .noto-medium {
+    @apply font-noto font-500;
+  }
+
+  .noto-bold {
+    @apply font-noto font-700;
+  }
+
+  .lang-ja .font-sans {
+    @apply font-sans-jp;
+  }
+
+  .lang-en .font-sans {
+    @apply font-en;
+  }
+
+  .lang-zh_CHT .font-sans {
+    @apply font-sans-tc;
+  }
+
+  .lang-ja .font-serif {
+    @apply font-serif-jp;
+  }
+
+  .lang-en .font-serif {
+    @apply font-en-serif;
+  }
+
+  .lang-zh_CHT .font-serif {
+    @apply font-serif-tc;
+  }
+  .lang-zh_CHS .font-sans {
+    @apply font-sans-tc;
+  }
+  .lang-zh_CHS .font-serif {
+    @apply font-serif-tc;
+  }
+    .lang-ko .font-sans {
+    @apply font-sans-ko;
+  }
+  .lang-ko .font-serif {
+    @apply font-serif-ko;
+  }
+}
+

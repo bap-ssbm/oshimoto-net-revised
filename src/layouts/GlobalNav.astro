@@ -1,0 +1,63 @@
+---
+interface Props {
+  pageId: string;
+  className?: string;
+  inner?: boolean;
+  id?: string;
+}
+
+const { pageId, className, inner = false, id = '' } = Astro.props;
+import navigationData from '../data/globalnav.json';
+
+// Utility function to adjust href based on current page
+function adjustHref(href: string, pageId: string): string {
+  // If we're on the top page (index), use the href as is
+  if (pageId === 'top') {
+    if (href.startsWith('/')) {
+      return href.replace('/', './');
+    }
+  }
+
+  // For other paths, add ../ prefix
+  if (href.startsWith('/')) {
+    return href.replace('/', '../');
+  }
+
+  return href;
+}
+---
+
+<nav id={id} class={` ${className} ${inner ? '' : ''}`} data-page-id={pageId}>
+  {
+    !inner && (
+      <div class='absolute top-0 bg-[linear-gradient(41deg,_rgba(0,0,0,0.00)_57.98%,_rgba(0,0,0,0.70)_100%)] pc:-right-40 pc:-top-56' />
+    )
+  }
+  <ul class='text-end'>
+    {
+      navigationData.navigation.map((item, index) => (
+        <li class={`${index === 0 ? '' : 'pc:mt-16 sp:mt-12'}`}>
+          <a href={adjustHref(item.href, pageId)} class=''>
+            <span
+              class='font-serif-jp font-400 leading-15 tracking-0 text-white pc:text-14 sp:text-14'
+              set:html={item.title}
+            />
+          </a>
+          {item.sub &&
+            item.sub.map((sub) => (
+              <a href={adjustHref(sub.href, pageId)} class={`${index === 0 ? '' : 'pc:mt-8 sp:mt-8'}`}>
+                <span
+                  class='font-serif-jp font-400 leading-15 tracking-0 text-white pc:text-12 sp:text-12'
+                  set:html={sub.title}
+                />
+              </a>
+            ))}
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+<style lang='scss' is:global>
+  .globalNav {
+  }
+</style>

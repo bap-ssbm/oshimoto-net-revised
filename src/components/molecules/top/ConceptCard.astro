@@ -1,0 +1,117 @@
+---
+import type { saiProps } from '@/types/CommonProps';
+import type { ImageMetadata } from 'astro';
+import Pic from '../Pic.astro';
+import ParallaxPhoto from '../ParallaxPhoto.astro';
+import Button from '@/components/atoms/Button.astro';
+import ImageWithCaption from '@/components/atoms/ImageWithCaption.astro';
+import type { Props as ImageWithCaptionProps } from '@/components/atoms/ImageWithCaption.astro';
+
+interface Props {
+  variation: string;
+  length: string;
+  tsubo: string;
+  subLength: string[];
+  bgImg: ImageWithCaptionProps;
+  visual: ImageWithCaptionProps;
+  caption?: string;
+  className?: string;
+  reverse?: boolean;
+  href: string;
+}
+
+const {
+  bgImg,
+  visual,
+  className = '',
+  variation,
+  length,
+  tsubo,
+  subLength,
+  reverse = false,
+  href,
+  caption,
+} = Astro.props;
+
+const formatSubLength = (areaText: string): string => {
+  const tsuboRegex = /（[^）]*）/;
+  const match = areaText.match(tsuboRegex);
+  if (!match) {
+    return areaText;
+  }
+  const [beforeMatch, afterMatch] = areaText.split(match[0]);
+
+  return `${beforeMatch}<span class='sp:block sp:text-end'>${match[0]}</span>${afterMatch || ''}`;
+};
+
+const formattedSubLength = subLength.map(formatSubLength);
+---
+
+<div class={`${className} pc:w-1120 relative z-1`}>
+ 
+  <div class='group relative w-full pc:h-400 pc:pt-105 sp:mx-auto sp:h-374 sp:w-342 sp:pt-116'>
+   
+    <div
+      class='absolute top-0 -z-1 h-full w-full overflow-hidden bg-[linear-gradient(0deg,_rgba(0,0,0,0.04)_0%,_rgba(0,0,0,0.04)_100%)]'>
+      <ImageWithCaption
+        className='ease w-full'
+        imageClass='h-full w-full object-cover duration-1000 group-hover:scale-105'
+        sp={bgImg.sp}
+        pc={bgImg.pc}
+        alt={bgImg.alt}
+      />
+    </div>
+    <a href={href} class='absolute left-0 top-0 z-10 h-full w-full'> </a>
+    <div
+      class={`font-en-serif absolute text-white tracking-8 top-0 left-0 font-600 pc:text-15 sp:text-15 w-full pt-24 ${reverse ? 'text-start pc:pl-40 sp:pl-16' : 'text-end pc:pr-40 sp:pr-16'}`}>
+      CONCEPT ROOM
+    </div>
+    <div
+      class={`${reverse ? 'pc:flex-row-reverse pc:pl-40 sp:pl-24' : 'pc:flex-row ml-auto pc:pr-40 sp:pr-24'} flex w-fit relative z-1 sp:w-full pc:pb-40 sp:pb-24`}>
+      <div class={`pc:w-452 sp:w-202 ${reverse ? 'text-start' : 'ml-auto text-end'} `}>
+        <h3 class='font-300 text-white pc:text-22 sp:text-16 sp:tracking-8'>{variation}コンセプトルーム</h3>
+        <hr class='h-1 w-full bg-white pc:mt-8 sp:mt-8' />
+        <div class='text-white pc:mt-14 sp:mt-4'>
+          <span class='font-300 pc:text-36 pc:tracking-10 sp:text-28 sp:tracking-0'
+            >{variation[0]}<span class='font-300 pc:text-30 sp:text-24'
+              >{variation.replace(variation.charAt(0), '')}</span
+            >
+            {length}m&sup2;</span
+          ><span class='font-300 tracking-10 pc:text-14 sp:block sp:text-end sp:text-12'> （約{tsubo}坪） </span>
+        </div>
+        <ul class='text-white pc:mt-14 sp:mt-4'>
+          {formattedSubLength.map((item) => <li class='font-300 tracking-10 pc:text-14 sp:text-12' set:html={item} />)}
+        </ul>
+        <Button
+          aria-label='VIEW MORE'
+          className={`w-136 ${reverse ? '' : 'ml-auto'} group-hover:opacity-70 pc:mt-35 sp:mt-33`}
+          text='VIEW MORE'
+          tag='button'
+          size='small'
+          color='white'
+          lang='en'
+        />
+      </div>
+      <div
+        class={`pc:w-500 group-hover:-translate-y-10 overflow-hidden pc:h-420 sp:h-280 absolute top-0 sp:w-140 ${reverse ? 'pc:left-[100%] sp:-right-24' : 'pc:right-[100%] sp:-left-24'}`}
+        data-sai='fade-up'>
+        <ParallaxPhoto
+          className='ease w-full'
+          sp={visual.sp}
+          pc={visual.pc}
+          alt={visual.alt}
+        />
+      </div>
+    </div>
+  </div>
+  <div class="sp:min-h-22  pc:min-h-125 w-full">
+    {
+      caption && (
+        <p
+          class={`p-5 text-10 leading-15 tracking-0 text-main pc:w-492 sp:w-226 ${reverse ? 'left-0' : 'ml-auto'}`}
+          set:html={caption}
+        />
+      )
+    }
+  </div>
+</div>

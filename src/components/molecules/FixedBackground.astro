@@ -1,0 +1,135 @@
+---
+import Img from '@/components/atoms/Img.astro';
+import Pic from '@/components/molecules/Pic.astro';
+import type { ImageMetadata } from 'astro';
+
+interface LayoutOptions {
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  objectPosition?: string;
+}
+
+interface Props {
+  className?: string;
+  imageClass?: string;
+  caption?: {
+    text?: string;
+    position?: 'capIn' | 'capOut' | 'capInLeft' | 'capOutLeft';
+    color?: 'black' | 'white' | 'sdw_wh' | 'sdw_bl';
+  };
+  src?: ImageMetadata;
+  sp?: string | ImageMetadata;
+  pc?: string | ImageMetadata;
+  loading?: 'lazy' | 'eager';
+  alt: string;
+  layout?: LayoutOptions;
+}
+
+const { className = '', imageClass = '', caption, src, sp, pc, loading = 'lazy', alt, layout = {} } = Astro.props;
+
+const getCaptionClass = () => {
+  switch (caption?.color) {
+    case 'white':
+      return 'text-white';
+    case 'black':
+      return 'text-main';
+    case 'sdw_wh':
+      return 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]';
+    case 'sdw_bl':
+      return 'text-black drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)]';
+    default:
+      return 'text-white';
+  }
+};
+
+const getCaptionPositionClass = () => {
+  switch (caption?.position) {
+    case 'capIn':
+      return 'bottom-0 absolute right-0 bg-white/2 backdrop-blur-sm';
+    case 'capOut':
+      return 'block relative text-right';
+    case 'capInLeft':
+      return 'bottom-0 absolute left-0 bg-white/2 backdrop-blur-sm';
+    case 'capOutLeft':
+      return 'block relative text-left';
+    default:
+      return 'bottom-0 absolute right-0 bg-white/2 backdrop-blur-sm';
+  }
+};
+
+const captionClass = getCaptionClass();
+const captionPositionClass = getCaptionPositionClass();
+
+const isPic = sp && pc;
+
+const imageBaseClass = `fixed-bg-image js-fixed-bg-image ${imageClass} ${layout.objectFit !== 'none' ? `object-${layout.objectFit}` : ''}`;
+---
+
+<div class={`fixed-bg-container js-fixed-bg-container -z-1 ${className}`}>
+  {
+    isPic ? (
+      <Pic
+        className={`fixed-bg-image js-fixed-bg-image ${imageBaseClass}`}
+        sp={sp}
+        pc={pc}
+        loading={loading}
+        alt={alt}
+        layout={layout}
+      />
+    ) : (
+      src && (
+        <Img className={`fixed-bg-image js-fixed-bg-image ${imageBaseClass}`} src={src} loading={loading} alt={alt} />
+      )
+    )
+  }
+  {
+    caption && (
+      <p
+        class={`px-8 py-5 font-serif-jp text-10 tracking-0 ${captionClass} ${captionPositionClass}`}
+        set:html={caption.text}
+      />
+    )
+  }
+</div>
+
+<style is:global>
+  .fixed-bg-container {
+    overflow: hidden;
+    position: relative;
+    clip-path: inset(0 0 0 0);
+    width: 100%;
+  }
+  .fixed-bg-image {
+    position: fixed;
+    width: 100%;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const containers = document.querySelectorAll('.js-fixed-bg-container');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const image = entry.target.querySelector('.js-fixed-bg-image');
+          if (image) {
+            if (entry.isIntersecting) {
+              (image as HTMLElement).style.display = 'block';
+            } else {
+              (image as HTMLElement).style.display = 'none';
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '0px',
+        threshold: 0,
+      }
+    );
+
+    containers.forEach((container) => {
+      observer.observe(container);
+    });
+  });
+</script>

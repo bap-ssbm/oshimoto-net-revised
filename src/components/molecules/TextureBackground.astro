@@ -1,0 +1,35 @@
+---
+import { getImage } from 'astro:assets';
+import myBackground from '@assets/imgs/common/bg-texture-01.png';
+
+interface BGProps {
+  className?: string;
+  patterName?: string;
+  itemClass?: string;
+}
+
+const { className = '', itemClass = '', patterName = 'pattern01' } = Astro.props as BGProps;
+const optimizedBackground = await getImage({ src: myBackground, format: 'webp' });
+
+const baseStyle = `textureWrap textureWrap--${patterName} absolute left-0 top-0 size-full`;
+const styles = `${baseStyle} ${className}`;
+---
+
+<div class={styles}>
+  <div
+    class={`absolute textureWrap__img size-full bg-repeat ${itemClass}`}
+    style={`background-image: url(${optimizedBackground.src});`}>
+  </div>
+</div>
+
+<style lang='scss' is:global>
+  .textureWrap {
+    &--pattern01 {
+      fill:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.05) 100%),
+        linear-gradient(109deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.04) 100%), lightgray;
+    }
+    &__img {
+    }
+  }
+</style>

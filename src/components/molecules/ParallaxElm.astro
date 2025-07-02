@@ -1,0 +1,56 @@
+---
+interface Props {
+  yEndPC?: string;
+  yEndSP?: string;
+  yEnd?: string;
+  yStartPC?: string;
+  yStartSP?: string;
+  yStart?: string;
+  className?: string;
+}
+
+const { className, yEndPC, yEndSP, yEnd = '-15%', yStart = '15%', yStartPC, yStartSP } = Astro.props;
+---
+
+<div
+  class={`js-parallax-elm ${className}`}
+  data-y-start={yStart}
+  data-y-end={yEnd}
+  data-y-start-pc={yStartPC}
+  data-y-end-pc={yEndPC}
+  data-y-start-sp={yStartSP}
+  data-y-end-sp={yEndSP}>
+  <slot />
+</div>
+<script>
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/src/ScrollTrigger';
+  import { _breakP } from '@/scripts/utils';
+  gsap.registerPlugin(ScrollTrigger);
+  const $parallaxElm = document.querySelectorAll<HTMLElement>('.js-parallax-elm');
+  $parallaxElm.forEach((elm) => {
+    const tl_parallax = gsap.timeline({
+      scrollTrigger: {
+        trigger: elm,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0,
+      },
+    });
+
+    const yStartPC = elm.dataset.yStartPc,
+      yEndPC = elm.dataset.yEndPc,
+      yStartSP = elm.dataset.yStartSp,
+      yEndSP = elm.dataset.yEndSp,
+      yStart = elm.dataset.yStart,
+      yEnd = elm.dataset.yEnd;
+
+    if (yStartPC && yStartPC != '' && yStartSP && yStartSP != '' && yEndPC && yEndPC != '' && yEndSP && yEndSP != '') {
+      _breakP.SP
+        ? tl_parallax.fromTo(elm, { translateY: yStartSP }, { translateY: yEndSP })
+        : tl_parallax.fromTo(elm, { translateY: yStartPC }, { translateY: yEndPC });
+    } else {
+      tl_parallax.fromTo(elm, { translateY: yStart }, { translateY: yEnd });
+    }
+  });
+</script>

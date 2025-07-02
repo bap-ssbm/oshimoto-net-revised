@@ -1,0 +1,129 @@
+---
+import '@/styles/base.css';
+
+import 'the-new-css-reset';
+import '@fontsource/eb-garamond';
+import '@fontsource-variable/noto-sans-jp';
+import '@fontsource-variable/noto-serif-jp';
+import '@fontsource/libre-baskerville';
+import '@fontsource-variable/cormorant-garamond';
+import metaJsonData from '@/data/meta.json';
+import Header from '@/layouts/Header.astro';
+import Footer from '@/layouts/Footer.astro';
+import type { MetaData, SiteMetaData } from '@/types/meta';
+import AnalyticsBody from '@/layouts/AnalyticsBody.astro';
+const metaData = metaJsonData as SiteMetaData;
+import MenuTrigger from './MenuTrigger.astro';
+
+interface PreloadItem {
+  src: string;
+  type?: string;
+  footerCap?: string;
+}
+
+interface Props {
+  pageId: string;
+  preloadItems?: PreloadItem[];
+  footerCap?: string;
+}
+
+const { pageId, preloadItems, footerCap } = Astro.props;
+const meta = metaData[pageId] as MetaData;
+
+const title = meta.title;
+const description = meta.description;
+const ogType = pageId === 'top' ? 'website' : 'article';
+const ogImage = new URL('./ogp.jpg', Astro.site);
+const url = new URL('./', Astro.site);
+const fmtUrl = pageId !== 'top' ? `${url}${pageId}/` : url;
+---
+
+<!doctype html>
+<html lang='ja'>
+  <head>
+    <!-- meta -->
+    <meta charset='UTF-8' />
+    <meta name='description' content={meta.description} />
+    <meta name='keywords' content={meta.keywords} />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' />
+    <meta name='format-detection' content='telephone=no' />
+    <meta name='viewport' content='width=device-width' />
+    <!-- OGP -->
+    <meta property='og:title' content={title} />
+    <meta property='og:type' content={ogType} />
+    <meta property='og:url' content={fmtUrl} />
+    <meta property='og:image' content={ogImage} />
+    <meta property='og:site_name' content='' />
+    <meta property='og:locale' content='ja' />
+    <meta property='og:description' content={description} />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta property='fb:app_id' content='' />
+    <!-- link -->
+    <link rel='start' href='/' title='ホーム' />
+    <link rel='canonical' href={fmtUrl} />
+    <meta name='generator' content={Astro.generator} />
+    <title>{meta.title}</title>
+    {preloadItems?.map((item) => <link rel='preload' href={item.src} type={item.type} />)}
+  </head>
+  <body>
+    <!-- <Header pageId={pageId} /> -->
+    <!-- <MenuTrigger pageId={pageId} /> -->
+    <slot />
+    <!-- <Footer caption={footerCap} pageId={pageId} /> -->
+    <script>
+      import { scrollAnimation } from '@/scripts/sai.ts';
+      import { setupLenisScroll } from '@/scripts/scroll.ts';
+      setupLenisScroll();
+      if (typeof window !== 'undefined') {
+        scrollAnimation();
+      }
+    </script>
+    <AnalyticsBody />
+  </body>
+</html>
+<style lang='scss' is:global>
+  html {
+    @include pc {
+      font-size: calc(100vw * 10 / 1440);
+    }
+
+    @include sp {
+      font-size: calc(100vw * 10 / 390);
+    }
+  }
+
+  body {
+    background: #fff;
+    color: #333;
+    font-family: 'Noto Serif JP Variable', sans-serif;
+    font-feature-settings: 'palt';
+    letter-spacing: 0.15em;
+    margin: 0;
+    overflow-x: hidden;
+    text-size-adjust: 100%;
+  }
+
+  .only-pc,
+  br.only-pc {
+    @include sp {
+      display: none;
+    }
+  }
+
+  .only-sp,
+  br.only-sp {
+    @include pc {
+      display: none;
+    }
+  }
+
+  a {
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+</style>

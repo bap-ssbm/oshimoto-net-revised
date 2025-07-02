@@ -1,0 +1,135 @@
+---
+import GlobalNav from '@/layouts/GlobalNav.astro';
+
+interface Props {
+  pageId: string;
+}
+
+const { pageId } = Astro.props;
+---
+
+<div id='' class='relative'>
+  {pageId === 'top' && <GlobalNav
+    inner={false}
+    pageId={pageId}
+    id='globalNav'
+    className='globalNav  absolute right-0 top-0 w-fit whitespace-nowrap sp:hidden'
+  />}
+  <div
+    id='globalMenu'
+    class={`globalMenu fixed right-0 top-0 h-screen bg-black/70 pc:w-fit pc:px-40 pc:py-56 pc:pt-106 sp:w-full sp:px-32 sp:pt-60 opacity-0`}>
+    <GlobalNav inner={true} pageId={pageId} className='' />
+  </div>
+</div>
+
+<script>
+  import { _breakP } from '@/scripts/utils';
+  const globalMenu = document.getElementById('globalMenu');
+  const menuTrigger = document.getElementById('menuTrigger');
+  const aArr = globalMenu?.querySelectorAll('a');
+
+  const setModalAccessibility = (isOpen: boolean) => {
+    if (menuTrigger) {
+      menuTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    if (isOpen) {
+      console.log('isOpen');
+      if (globalMenu) {
+        globalMenu.setAttribute('role', 'dialog');
+        globalMenu.setAttribute('aria-modal', 'true');
+        globalMenu.focus();
+      }
+      aArr?.forEach((a: HTMLAnchorElement) => {
+        a.setAttribute('tabindex', '0');
+      });
+    } else {
+      console.log('isClose');
+      aArr?.forEach((a: HTMLAnchorElement) => {
+        a.setAttribute('tabindex', '-1');
+      });
+      if (globalMenu) {
+        globalMenu.removeAttribute('role');
+        globalMenu.removeAttribute('aria-modal');
+      }
+    }
+  };
+
+  const toggleMenu = () => {
+    if (!globalMenu || !menuTrigger) return;
+
+    globalMenu.classList.toggle('is-active');
+    menuTrigger.classList.toggle('is-active');
+
+    setModalAccessibility(globalMenu.classList.contains('is-active'));
+
+    document.body.style.overflow = globalMenu.classList.contains('is-active') ? 'hidden' : '';
+  };
+  if (_breakP.SP) {
+    aArr?.forEach((a: HTMLAnchorElement) => {
+      a.addEventListener('click', () => {
+        toggleMenu();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuTrigger = document.getElementById('menuTrigger');
+
+    if (menuTrigger) {
+      menuTrigger.addEventListener('click', toggleMenu);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const menu = document.getElementById('globalMenu');
+        if (menu && menu.classList.contains('is-active')) {
+          toggleMenu();
+        }
+      }
+    });
+  });
+</script>
+<style lang='scss' is:global>
+  .globalMenu {
+    transition: 0.5s ease-in-out;
+
+    @include pc {
+      transform: translateX(100%);
+    }
+
+    &.is-active {
+      opacity: 1;
+      pointer-events: auto;
+      @include pc {
+        transform: translateX(0);
+      }
+    }
+  }
+  .menuTrigger {
+    &.is-active {
+      span {
+        @include sp {
+          background-color: #fff !important;
+        }
+        &:first-child {
+          @include pc {
+            transform: translateY(0.1rem) rotate(21deg);
+          }
+          @include sp {
+            transform: translateY(-0.22rem) rotate(21deg);
+          }
+        }
+
+        &:nth-child(2) {
+          @include pc {
+            transform: translateY(-0.1rem) rotate(-21deg);
+          }
+          @include sp {
+            transform: translateY(0.22rem) rotate(-21deg);
+          }
+        }
+      }
+    }
+  }
+</style>

@@ -1,0 +1,245 @@
+---
+// src/components/YouTubeEmbed.astro// Replace with your YouTube video ID
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { string } from 'astro:schema';
+interface Props {
+  videoId: string;
+  autoplay?: boolean;
+  thumbAlt?: string;
+  controls?: boolean;
+  thumbnail?: ImageMetadata;
+}
+const { videoId, autoplay = true, controls = false, thumbnail, thumbAlt = "" } = Astro.props;
+---
+
+<div class='yt-wrapper' data-autoplay={autoplay} data-controls={controls} data-id={videoId}>
+  <div class='ytPLayer-container'></div>
+  {
+    thumbnail && (
+      <div class='yt-wrapper__thumbnail js-thumbnail'>
+        <Image
+          src={thumbnail}
+          class='yt-wrapper__thumbnail'
+          alt={thumbAlt}
+          width={1920}
+          height={1080}
+          loading='eager'
+          format='webp'
+        />
+        <div class='yt-wrapper__play-button'>
+          <span class='play-icon'>▶</span>
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  // Load the IFrame Player API code asynchronously.
+  if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+  }
+
+  const videoWrapper = document.querySelectorAll<HTMLDivElement>('.yt-wrapper');
+  console.log('Found video wrappers:', videoWrapper.length);
+
+  // Create a map to store player instances
+  const players = new Map<string, YT.Player>();
+
+  // Define YT interface if not available yet
+  if (typeof YT === 'undefined') {
+    (window as any).YT = { loading: 0, loaded: 0 };
+  }
+
+  // Store the existing onYouTubeIframeAPIReady if it exists
+  const existingOnYouTubeIframeAPIReady = window.onYouTubeIframeAPIReady;
+
+  // Function to initialize all players
+  function initializePlayers() {
+    videoWrapper.forEach((wrapper, index) => {
+      const autoplay = wrapper.dataset.autoplay === 'true';
+      const controls = wrapper.dataset.controls === 'true';
+      const videoId = wrapper.dataset.id || '';
+      console.log('Video ID:', videoId);
+
+      const thumbnail = wrapper.querySelector<HTMLElement>('.js-thumbnail');
+      const playButton = wrapper.querySelector<HTMLElement>('.yt-wrapper__play-button');
+      console.log('Found thumbnail:', !!thumbnail, 'Found play button:', !!playButton);
+
+      // Create a unique player container
+      const playerContainer = wrapper.querySelector('.ytPLayer-container');
+      if (!playerContainer) {
+        console.error('Player container not found');
+        return;
+      }
+
+      const playerId = `yt-player-${index}-${Math.random().toString(36).substr(2, 9)}`;
+      playerContainer.id = playerId;
+      console.log('Created player ID:', playerId);
+
+      function createPlayer() {
+        console.log('Creating player for:', playerId);
+        const player = new YT.Player(playerId, {
+          videoId: videoId,
+          playerVars: {
+            autoplay: autoplay ? 1 : 0,
+            controls: 1,
+            mute: 0,
+            modestbranding: 1,
+            rel: 0,
+            showinfo: 0,
+            loop: 1,
+            playlist: videoId,
+            // @ts-expect-error - playsinline is a valid YouTube parameter
+            playsinline: 1,
+          },
+          events: {
+            onReady: (event: YT.PlayerEvent) => {
+              console.log('Player ready:', playerId);
+              if (autoplay) {
+                event.target.playVideo();
+                wrapper.classList.add('is-playing');
+              }
+            },
+            onStateChange: (event: YT.PlayerEvent) => {
+              console.log('Player state changed:', event);
+              // @ts-ignore - YT.PlayerState is available at runtime
+              if (event.data === YT.PlayerState.ENDED) {
+                if (autoplay) {
+                  event.target.playVideo();
+                }
+              }
+              // @ts-ignore - YT.PlayerState is available at runtime
+              if (event.data === YT.PlayerState.PLAYING) {
+                wrapper.classList.add('is-playing');
+              }
+            },
+          },
+        });
+
+        players.set(playerId, player);
+        return player;
+      }
+
+      if (thumbnail || playButton) {
+        const clickHandler = () => {
+          console.log('thumbnail clicked');
+          const player = players.get(playerId);
+          if (player) {
+            console.log('Playing video');
+            player.playVideo();
+            wrapper.classList.add('is-playing');
+          } else {
+            console.error('Player not found for ID:', playerId);
+          }
+        };
+
+        if (thumbnail) {
+          thumbnail.addEventListener('click', clickHandler);
+        }
+        if (playButton) {
+          playButton.addEventListener('click', clickHandler);
+        }
+      }
+
+      // Create the player immediately if API is ready
+      if ((window as any).YT && (window as any).YT.Player) {
+        console.log('YT API already loaded, creating player');
+        createPlayer();
+      }
+    });
+  }
+
+  // Chain the onYouTubeIframeAPIReady callbacks
+  window.onYouTubeIframeAPIReady = () => {
+    console.log('YT API loaded');
+    // Call the existing callback if there was one
+    if (existingOnYouTubeIframeAPIReady) {
+      existingOnYouTubeIframeAPIReady();
+    }
+    initializePlayers();
+  };
+</script>
+
+<style lang='scss' is:global>
+  .yt-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+
+    .ytPLayer-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 11.4rem;
+      height: 11.4rem;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 4;
+      transition: opacity 0.3s ease;
+
+      @include sp {
+        width: 5rem;
+        height: 5rem;
+      }
+
+      .play-icon {
+        color: #fff;
+        font-size: 4.4rem;
+        margin-left: 0.5rem;
+
+        @include sp {
+          font-size: 1.6rem;
+        }
+      }
+    }
+
+    &__thumbnail {
+      position: relative;
+      width: 100%;
+      height: auto;
+      z-index: 3;
+      transition: opacity 0.3s ease;
+      transform: scale(1);
+      display: block;
+    }
+
+    &.is-playing {
+      .yt-wrapper__thumbnail,
+      .yt-wrapper__play-button {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .ytPLayer-container {
+        opacity: 1;
+      }
+    }
+  }
+</style>

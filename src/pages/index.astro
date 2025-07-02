@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MV from '@/components/organism/top/MV.astro';
+import ParallaxElm from '@/components/molecules/ParallaxElm.astro';
+import { peoplePics, jpPics, usPics } from '@/data/data';
+import { getImage } from 'astro:assets';
+import Photo from '@/components/molecules/Photo.astro';
+---
+
+<Layout pageId='top'>
+  <main>
+    <section class='relative flex h-screen w-full items-center justify-center'>
+      <ParallaxElm className='absolute left-30 top-30 pc:w-200'>
+        <img data-sai='fade' src={peoplePics[0].src} alt='oshimoto.net | Photography Portfolio' class='h-auto w-200' />
+      </ParallaxElm>
+      <h2>OSHIMOTO RYUICHI</h2>
+    </section>
+    <section class='relative flex h-screen w-full items-center justify-center'>
+      <ParallaxElm className='absolute left-30 top-30 pc:w-200'>
+        <img src={peoplePics[0].src} alt='oshimoto.net | Photography Portfolio' class='h-auto w-200' />
+      </ParallaxElm>
+      <h2>OSHIMOTO RYUICHI</h2>
+    </section>
+  </main>
+</Layout>

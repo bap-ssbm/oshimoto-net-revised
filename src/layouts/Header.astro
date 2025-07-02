@@ -1,0 +1,147 @@
+---
+// header.astro
+import HdrLogo from '@/assets/imgs/common/logo.svg';
+import Img from '@/components/atoms/Img.astro';
+import GlobalMenu from './GlobalMenu.astro';
+
+interface Props {
+  pageId: string;
+}
+
+const { pageId } = Astro.props;
+function adjustHref(href: string, pageId: string): string {
+  // If we're on the top page (index), use the href as is
+  if (pageId === 'top') {
+    if (href.startsWith('/')) {
+      return href.replace('/', './');
+    }
+  }
+
+  // For other paths, add ../ prefix
+  if (href.startsWith('/')) {
+    return href.replace('/', '../');
+  }
+
+  return href;
+}
+---
+
+<header
+  id='gHeader'
+  class='header pointer-events-none fixed left-0 top-0 z-50 w-full pc:px-40 pc:py-56 sp:px-32 sp:py-24'>
+  <div class='flex items-center justify-between'>
+    <h1 class='pc:pl-34'>
+      <a href={adjustHref('/', pageId)} class='header__logo pointer-events-auto'>
+        <Img
+          src={HdrLogo}
+          alt='コスモスイニシアの住まい総合ギャラリー INITIA LOUNGE 三田'
+          loading='eager'
+          className='h-auto pc:w-340 sp:w-232'
+        />
+      </a>
+    </h1>
+    <GlobalMenu pageId={pageId} />
+  </div>
+</header>
+<script>
+  const $gHeader = document.getElementById('gHeader');
+  const $menuGroup = $gHeader?.querySelector('.js-menuGroup');
+  const globalNav = document.getElementById('globalNav');
+  const globalMenu = document.getElementById('globalMenu');
+  const menuTrigger = document.getElementById('menuTrigger');
+  const fadePos = 200;
+  let pos = 0;
+  let posMin = 0;
+  let posMax = 0;
+
+  let id = null;
+  const interval = 300;
+  let flag = true;
+
+  if ($gHeader) {
+    const scrollCallback = function () {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+      if (fadePos < scrollTop) {
+        $gHeader.classList.add('is-hidden');
+
+        if (!globalMenu?.classList.contains('is-active')) {
+          $gHeader.classList.add('is-contentHidden');
+          menuTrigger?.classList.add('is-contentHidden');
+        }
+      } else {
+        $gHeader.classList.remove('is-hidden');
+
+        if (!globalMenu?.classList.contains('is-active')) {
+          $gHeader.classList.remove('is-contentHidden');
+          menuTrigger?.classList.remove('is-contentHidden');
+        }
+      }
+      if (flag) {
+        pos = window.scrollY;
+        flag = false;
+      }
+      if (!flag) {
+        const forwardRange = 40;
+        const backRange = 120;
+        posMin = pos - forwardRange;
+        posMax = pos + backRange;
+      }
+      if (scrollTop < posMin) {
+        flag = true;
+      }
+      if (scrollTop > posMax) {
+        flag = true;
+      }
+    };
+    window.addEventListener('scroll', scrollCallback);
+  }
+</script>
+
+<style lang='scss' is:global>
+  .header {
+    &__logo {
+      transition: opacity 0.6s ease-in-out;
+      pointer-events: auto;
+    }
+    .globalNav,
+    .menuTrigger {
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    .globalNav {
+      @include pc {
+        pointer-events: auto;
+      }
+    }
+
+    &.is-hidden {
+      .header__logo {
+        opacity: 0;
+        pointer-events: none !important;
+      }
+    }
+
+    &.is-contentHidden {
+      .globalNav {
+        @include pc {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .menuTrigger {
+    @include pc {
+      opacity: 0;
+      pointer-events: none;
+    }
+    &.is-contentHidden {
+      @include pc {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+</style>

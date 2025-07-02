@@ -1,0 +1,63 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type BaseProps = {
+  id?: string;
+  tag?: 'a' | 'button' | 'div';
+  lang?: 'ja' | 'en';
+  size?: 'small' | 'medium' | 'large';
+  color?: 'white' | 'black';
+  text: string;
+  className?: string;
+};
+
+type AnchorProps = BaseProps & { tag: 'a'; href: string } & HTMLAttributes<'a'>;
+type ButtonProps = BaseProps & { tag: 'button' } & HTMLAttributes<'button'>;
+type DivProps = BaseProps & { tag: 'div' } & HTMLAttributes<'div'>;
+
+type Props = AnchorProps | ButtonProps | DivProps;
+
+const { id, text, className = '', tag = 'a', lang = 'ja', size = 'medium', color = 'white', ...rest } = Astro.props;
+
+const isExternalLink = (props: Props): props is AnchorProps => {
+  return (
+    props.tag === 'a' &&
+    'href' in props &&
+    typeof props.href === 'string' &&
+    (props.href.startsWith('http://') || props.href.startsWith('https://'))
+  );
+};
+const combinedClass = `${className} text-center flex items-center justify-center bg-white rounded-[99.9rem] duration-500 ease ${color === 'white' ? 'bg-white text-main hover:opacity-70 ' : ''} ${color === 'black' ? 'bg-[#393A4B] text-white hover:opacity-70' : ''}
+ ${size === 'small' ? 'pc:h-32 sp:h-32' : size === 'medium' ? 'pc:h-48 sp:h-40' : 'pc:h-48 sp:h-40'}`;
+const txtClass = `leading-12 ${lang === 'ja' ? 'font-en-serif' : 'font-en-serif'}  ${
+  size === 'small' ? 'pc:text-12 sp:text-12' : size === 'medium' ? 'pc:text-16 sp:text-12' : 'pc:text-18 sp:text-14'
+}`;
+
+const linkAttributes = isExternalLink(Astro.props) ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<Fragment>
+  {
+    tag === 'a' && (
+      <a id={id} class={`${combinedClass}`} {...(rest as HTMLAttributes<'a'>)} {...linkAttributes}>
+        <span set:html={text} class={txtClass} />
+      </a>
+    )
+  }
+  {
+    tag === 'button' && (
+      <button id={id} class={`${combinedClass}`} {...(rest as HTMLAttributes<'button'>)}>
+        <span set:html={text} class={txtClass} />
+      </button>
+    )
+  }
+  {
+    tag === 'div' && (
+      <div id={id} class={`${combinedClass}`} {...(rest as HTMLAttributes<'div'>)}>
+        <span set:html={text} class={txtClass} />
+      </div>
+    )
+  }
+</Fragment>
+
+<style></style>

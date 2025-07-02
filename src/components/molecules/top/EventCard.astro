@@ -1,0 +1,203 @@
+---
+import Heading from '@/components/atoms/Heading.astro';
+import Button from '@/components/atoms/Button.astro';
+import ImageWithCaption from '@/components/atoms/ImageWithCaption.astro';
+import type { Props as ImageWithCaptionProps } from '@/components/atoms/ImageWithCaption.astro';
+
+interface Description {
+  ttl: string;
+  text: string;
+}
+
+export interface Props {
+  ttl: string;
+  status?: '終了' | '予約受付中'; //このステータス以外の文言が出ればここに追加して、スタイルを作成してください。
+  descriptionList: Description[]; //日時、場所、参加費の文言用、モーダル内にも表示します。
+  img: ImageWithCaptionProps;
+  className?: string;
+  modal?: {
+    eventDesc?: string;
+    aboutDesc?: string;
+    caption?: string;
+  };
+  link?: string; //予約はこちらのリンク先
+}
+
+const { className = '', ttl, status = '予約受付中', descriptionList, img, modal, link } = Astro.props;
+---
+
+<div class={`${className} eventCard js-event-card flex h-full flex-col bg-white pc:w-668 sp:w-300 pc:p-40 sp:p-24`}>
+  <div class='relative sp:flex sp:gap-24'>
+    <div class='right-0 shrink-0 pc:absolute pc:w-168 sp:w-84'>
+      <ImageWithCaption {...img} className='right-0 h-auto w-full' />
+    </div>
+    <div class='pc:w-380'>
+      <div
+        class={`${status === '予約受付中' ? 'text-white bg-black border-darkGray3' : status === '終了' ? 'bg-lightGray2 text-darkGray1 border-darkGray2' : ''} border pc:text-12 border-solid pc:px-8 sp:text-10 sp:py-4 sp:tracking-6 sp:px-8 pc:py-4 pc:rounded-4 sp:rounded-4 w-fit`}
+        set:html={status}
+      />
+      <Heading
+        level={3}
+        className='font-500 leading-15 text-main pc:mt-8 pc:text-20 pc:tracking-10 sp:mt-8 sp:text-14 sp:tracking-7'
+        text={ttl}
+      />
+    </div>
+  </div>
+  <div class='flex flex-grow flex-col justify-end pc:mt-24 pc:w-384 sp:mt-24'>
+    {
+      descriptionList.map((item, index) => (
+        <dl
+          class={`relative flex font-sans-jp text-main after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:bg-[#ddd] pc:gap-8 pc:pb-8 pc:text-14 pc:leading-15 pc:tracking-7 sp:gap-8 sp:pb-8 sp:text-12 sp:leading-15 ${
+            index !== 0 ? 'pc:pt-8 sp:pt-8' : ''
+          }`}>
+          <dt class='font-500 pc:w-80 sp:w-56' set:html={item.ttl} />
+          <dd class='flex-grow font-400' set:html={item.text} />
+        </dl>
+      ))
+    }
+  </div>
+  {
+    modal && (
+      <button class='js-modal-btn pointer group mt-auto flex w-full cursor-pointer items-center pc:mt-40 pc:gap-16 sp:mt-24 sp:justify-end sp:gap-12'>
+        <span class='font-en-400 pc:text-16 pc:leading-10 pc:tracking-7 pc:text-black sp:text-14'>VIEW MORE </span>
+        <div class='duration-300 group-hover:translate-x-4 group-hover:opacity-80 pc:w-41 sp:w-40'>
+          <svg
+            class='h-auto w-full'
+            xmlns='http://www.w3.org/2000/svg'
+            width='41'
+            height='7'
+            viewBox='0 0 41 7'
+            fill='none'>
+            <path d='M-5.15503e-09 5.63611L40.147 5.63611M34.3345 0.434353L40.511 5.82324' stroke='#363231' />
+          </svg>
+        </div>
+      </button>
+    )
+  }
+  {
+    modal && (
+      <div class='js-event-modal eventModal invisible fixed left-0 top-0 z-[1001] flex h-screen w-screen items-center justify-center bg-black/0 transition-all duration-300'>
+        <div class='js-close-modal absolute right-0 top-0 -z-1 h-screen w-screen cursor-pointer' />
+        <div class='relative h-fit max-h-screen overflow-scroll' data-lenis-prevent>
+          <div class='modal-inner relative mx-auto bg-white opacity-0 transition-all duration-300 pc:w-920 pc:px-48 pc:py-56 sp:w-300 sp:p-24'>
+            <button class='js-close-modal absolute cursor-pointer pc:right-16 pc:top-16 sp:right-8 sp:top-8'>
+              <svg xmlns='http://www.w3.org/2000/svg' width='45' height='45' viewBox='0 0 45 45' fill='none'>
+                <path
+                  d='M22.5 0.5C10.3497 0.5 0.5 10.3497 0.5 22.5C0.5 34.6503 10.3497 44.5 22.5 44.5C34.6503 44.5 44.5 34.6503 44.5 22.5C44.5 10.3497 34.6503 0.5 22.5 0.5Z'
+                  fill='white'
+                  stroke='#9F9F9F'
+                  stroke-linejoin='round'
+                />
+                <path
+                  d='M23.0002 24.9999L28.0007 30L30 27.9999L25.0001 23L30 18.0001L27.9999 16L23.0001 21L18.0002 16L16 18.0001L21.0003 23.0001L16 28.0006L18.0002 30L23.0002 24.9999Z'
+                  fill='#363231'
+                />
+              </svg>
+            </button>
+            <div>
+              <div
+                class={`${status === '予約受付中' ? 'border-darkGray3 bg-black text-white' : status === '終了' ? 'border-darkGray2 bg-lightGray2 text-darkGray1' : ''} w-fit border border-solid pc:rounded-4 pc:px-8 pc:py-4 pc:text-12 sp:rounded-4 sp:px-8 sp:py-4 sp:text-10 sp:tracking-6`}
+                set:html={status}
+              />
+              <Heading
+                level={3}
+                className='font-500 leading-15 text-main pc:mt-16 pc:text-20 pc:tracking-10 pc:leading-15 sp:leading-15 sp:mt-8 sp:text-14 sp:tracking-7'
+                text={ttl}
+              />
+              {modal.eventDesc && (
+                <div class='text-darkGray1 pc:mt-16 pc:text-14 pc:leading-20 pc:tracking-7 sp:mt-16 sp:text-12 sp:leading-20 sp:tracking-6'>
+                  <p set:html={modal.eventDesc} />
+                </div>
+              )}
+            </div>
+            <div class='pc:mt-40 pc:flex pc:justify-between sp:mt-16'>
+              <div class='pc:w-412'>
+                {descriptionList.map((item, index) => (
+                  <dl
+                    class={`relative flex font-sans-jp text-main after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:bg-[#ddd] pc:gap-8 pc:pb-8 pc:text-14 pc:leading-15 pc:tracking-7 sp:gap-8 sp:pb-8 sp:text-12 sp:leading-15 ${
+                      index !== 0 ? 'pc:pt-8 sp:pt-8' : ''
+                    }`}>
+                    <dt class='font-500 pc:w-80 sp:w-56' set:html={item.ttl} />
+                    <dd class='flex-grow font-400' set:html={item.text} />
+                  </dl>
+                ))}
+                {modal.aboutDesc && (
+                  <p
+                    class='pc:tarcking-7 sp:tarcking-6 font-serif-jp font-500 text-main pc:mt-24 pc:text-14 pc:leading-18 sp:mt-16 sp:text-12 sp:leading-18'
+                    set:html={modal.aboutDesc}
+                  />
+                )}
+                {modal.caption && (
+                  <p
+                    class='pc:tarcking-7 sp:tarcking-5 font-sans-jp font-400 text-gray1 pc:mt-24 pc:text-12 pc:leading-15 sp:mt-8 sp:text-10 sp:leading-15'
+                    set:html={modal.caption}
+                  />
+                )}
+              </div>
+              <div class='pc:w-380 sp:mx-auto sp:mt-16 sp:w-190'>
+                <ImageWithCaption {...img} className='h-auto w-full' />
+              </div>
+            </div>
+            {link && status !== '終了' && (
+              <Button
+                tag='a'
+                href={link}
+                target='_blank'
+                className='pc:mt-40 border border-solid border-gray1 sp:mt-16 pc:w-208 mx-auto sp:w-252'
+                text='予約はこちら'
+                color='white'
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>
+<script>
+  const $eventCard = document.querySelectorAll<HTMLElement>('.js-event-card');
+
+  $eventCard.forEach((eventCard) => {
+    const $modalBtn = eventCard.querySelector<HTMLButtonElement>('.js-modal-btn');
+    const $modal = eventCard.querySelector<HTMLDivElement>('.js-event-modal');
+    const $closeModalBtn = eventCard.querySelectorAll('.js-close-modal');
+    const $main = document.querySelector<HTMLDivElement>('main');
+    const $body = document.querySelector<HTMLDivElement>('body');
+    if (!$modal || !$body) return;
+    const $insertedModal = $body.insertAdjacentElement('beforeend', $modal);
+    if (!$insertedModal) return;
+
+    if ($modalBtn) {
+      $modalBtn.addEventListener('click', () => {
+        $insertedModal.classList.remove('invisible');
+        ($insertedModal as HTMLElement).offsetHeight;
+        $insertedModal.classList.add('is-open');
+        $body?.classList.add('overflow-hidden');
+      });
+    }
+
+    if ($closeModalBtn) {
+      $closeModalBtn.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          $insertedModal.classList.remove('is-open');
+          setTimeout(() => {
+            $insertedModal.classList.add('invisible');
+          }, 300);
+          $body?.classList.remove('overflow-hidden');
+        });
+      });
+    }
+  });
+</script>
+<style lang='scss'>
+  .eventModal {
+    &.is-open {
+      visibility: visible;
+      background-color: rgba(0, 0, 0, 0.4);
+
+      .modal-inner {
+        opacity: 1;
+      }
+    }
+  }
+</style>

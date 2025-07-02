@@ -1,0 +1,14 @@
+README.md
+node_modules/
+.next/
+.nuxt/
+.astro/
+build/
+dist/
+out/
+public/
+package-lock.json
+yarn.lock
+.github
+.stylelintrc
+pnpm-lock.yaml

@@ -1,0 +1,127 @@
+---
+import { getImage } from 'astro:assets';
+import type { saiProps } from '@/types/CommonProps';
+import type { ImageMetadata } from 'astro';
+
+interface LayoutOptions {
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  objectPosition?: string;
+}
+
+export interface Props {
+  sp: string | ImageMetadata;
+  pc: string | ImageMetadata;
+  loading?: 'lazy' | 'eager';
+  alt: string;
+  modifier?: string;
+  className?: string;
+  sai?: saiProps;
+  layout?: LayoutOptions;
+}
+
+const { sp, pc, loading = 'lazy', className = 'pic', alt, modifier, sai, layout } = Astro.props;
+
+let mobileImg: { src: string; options: { width?: number; height?: number } };
+let desktopImg: { src: string; options: { width?: number; height?: number } };
+let mobileWidth: number;
+let mobileHeight: number;
+let desktopWidth: number;
+let desktopHeight: number;
+
+if (typeof sp === 'string') {
+  mobileImg = await getImage({ src: sp, format: 'webp' });
+  mobileWidth = mobileImg.options.width ?? 0;
+  mobileHeight = mobileImg.options.height ?? 0;
+} else {
+  mobileImg = await getImage({ src: sp, format: 'webp' });
+  mobileWidth = sp.width;
+  mobileHeight = sp.height;
+}
+
+if (typeof pc === 'string') {
+  desktopImg = await getImage({ src: pc, format: 'webp' });
+  desktopWidth = desktopImg.options.width ?? 0;
+  desktopHeight = desktopImg.options.height ?? 0;
+} else {
+  desktopImg = await getImage({ src: pc, format: 'webp' });
+  desktopWidth = pc.width;
+  desktopHeight = pc.height;
+}
+const objectFitStyle = layout?.objectFit !== 'none' ? `object-fit: ${layout?.objectFit};` : '';
+const objectPositionStyle = layout?.objectPosition ? `object-position: ${layout.objectPosition};` : '';
+const additionalStyles = layout ? 'width: 100%; height: 100%;' : '';
+
+const pictureClass = `${className} ${modifier ? `${className}--${modifier}` : ''}`.trim();
+
+const saiAttributes = sai
+  ? {
+      'data-sai': sai.styles,
+      ...(sai.offset !== undefined && {
+        'data-sai-offset': sai.offset.toString(),
+      }),
+      ...(sai.delay !== undefined && {
+        'data-sai-delay': sai.delay.toString(),
+      }),
+      ...(sai.easing !== undefined && { 'data-sai-easing': sai.easing }),
+      ...(sai.duration !== undefined && {
+        'data-sai-duration': sai.duration.toString(),
+      }),
+      ...(sai.once !== undefined && { 'data-sai-once': sai.once.toString() }),
+    }
+  : {};
+const inlineStyle = `${objectFitStyle} ${objectPositionStyle} ${additionalStyles}`.trim();
+---
+
+<picture class={pictureClass} {...saiAttributes}>
+  <source media='(max-width: 767px)' srcset={mobileImg.src} width={mobileWidth} height={mobileHeight} />
+  <source media='(min-width: 768px)' srcset={desktopImg.src} width={desktopWidth} height={desktopHeight} />
+  <img
+    src={desktopImg.src}
+    loading={loading}
+    alt={alt}
+    width={desktopWidth}
+    height={desktopHeight}
+    style={inlineStyle}
+  />
+</picture>
+<style lang='scss'>
+  picture {
+    display: block;
+
+    img {
+      display: block;
+      height: auto;
+      max-width: 100%;
+    }
+
+    // カバーmodifier
+    &--cover {
+      height: 100%;
+      position: relative;
+
+      .picture__img {
+        height: 100%;
+        left: 0;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+    }
+
+    // コンテインmodifier
+    &--contain {
+      height: 100%;
+      position: relative;
+
+      .picture__img {
+        height: 100%;
+        left: 0;
+        object-fit: contain;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+    }
+  }
+</style>

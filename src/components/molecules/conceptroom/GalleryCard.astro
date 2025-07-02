@@ -1,0 +1,20 @@
+---
+import Heading from '@/components/atoms/Heading.astro';
+import Img from '@/components/atoms/Img.astro';
+import type { Props as ImgProps } from '@/components/atoms/Img.astro';
+import Button from '@/components/atoms/Button.astro';
+
+export interface components {
+  img?: ImgProps;
+  text?: string;
+}
+
+const { className = '', img, text } = Astro.props;
+---
+
+<div class={`${className} flex flex-col pc:gap-32 sp:gap-16`}>
+  <Img className='w-full' {...img} />
+  <div class='break-words'>
+    <p set:html={text} class='font-serif-jp font-400 text-main pc:text-14 pc:leading-17 sp:text-11 sp:leading-15' />
+  </div>
+</div>
