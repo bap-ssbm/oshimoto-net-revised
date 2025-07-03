@@ -1040,6 +1040,57 @@ body[data-sai-easing='ease-in-out-quart'] [data-sai] {
 [data-sai='fade-down-left'] {
     transform: translate3d(100px, -100px, 0);
 }
+[data-sai^='blurFade'][data-sai^='blurFade'] {
+    opacity: 0;
+    filter: blur(15px);
+    transition-property: opacity, transform, filter;
+}
+
+[data-sai^='blurFade'][data-sai^='blurFade'].sai-animate {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateZ(0);
+}
+
+[data-sai='blurFade-up'] {
+    filter: blur(15px);
+    transform: translate3d(0, 40px, 0);
+}
+
+[data-sai='blurFade-down'] {
+    filter: blur(15px);
+    transform: translate3d(0, -100px, 0);
+}
+
+[data-sai='blurFade-right'] {
+    filter: blur(15px);
+    transform: translate3d(-100px, 0, 0);
+}
+
+[data-sai='blurFade-left'] {
+    filter: blur(15px);
+    transform: translate3d(100px, 0, 0);
+}
+
+[data-sai='blurFade-up-right'] {
+    filter: blur(15px);
+    transform: translate3d(-100px, 100px, 0);
+}
+
+[data-sai='blurFade-up-left'] {
+    filter: blur(15px);
+    transform: translate3d(100px, 100px, 0);
+}
+
+[data-sai='blurFade-down-right'] {
+    filter: blur(15px);
+    transform: translate3d(-100px, -100px, 0);
+}
+
+[data-sai='blurFade-down-left'] {
+    filter: blur(15px);
+    transform: translate3d(100px, -100px, 0);
+}
 
 [data-sai^='zoom'][data-sai^='zoom'] {
     opacity: 0;
@@ -1153,4 +1204,93 @@ body[data-sai-easing='ease-in-out-quart'] [data-sai] {
 }
 [data-sai^='target'][data-sai^='target'] {
     opacity: 1;
+}
+
+[data-sai='clip-down'] {
+    > * {
+        clip-path:polygon(0% 0%, 100% 0%, 100% 85%, 0% 85%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98)  !important;
+    }
+}
+[data-sai='clip-down'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-up'] {
+    > * {
+        clip-path:polygon(0% 15%, 100% 15%, 100% 100%, 0% 100%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-up'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-right'] {
+    > * {
+        clip-path:polygon(0% 0%, 85% 0%, 85% 100%, 0% 100%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-right'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-left'] {
+    > * {
+        clip-path:polygon(15% 0%, 100% 0%, 100% 100%, 15% 100%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-left'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-upRight'] {
+    > * {
+        clip-path:polygon(0% 15%, 85% 15%, 85% 100%, 0% 100%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-upRight'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-upLeft'] {
+    > * {
+        clip-path:polygon(15% 0%, 100% 0%, 100% 85%, 15% 85%);
+        transition: clip-path 2.4s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-upLeft'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-rightDown'] {
+    > * {
+        clip-path: polygon(0% 0%, 85% 0%, 85% 85%, 0% 85%);
+        transition: clip-path 1.8s cubic-bezier(.38,.19,.12,.98) !important;
+    }
+}
+[data-sai='clip-rightDown'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}
+[data-sai='clip-leftDown'] {
+    > * {
+        clip-path: polygon(15% 0%, 100% 0%, 100% 85%, 15% 85%);
+        transition: clip-path 2s ease !important;
+    }
+}
+[data-sai='clip-leftDown'].sai-animate {
+    > * {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
 }

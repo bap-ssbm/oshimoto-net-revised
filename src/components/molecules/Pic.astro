@@ -72,7 +72,7 @@ const saiAttributes = sai
 const inlineStyle = `${objectFitStyle} ${objectPositionStyle} ${additionalStyles}`.trim();
 ---
 
-<picture class={pictureClass} {...saiAttributes}>
+<picture class={`${pictureClass} pointer-events-none`} {...saiAttributes}>
   <source media='(max-width: 767px)' srcset={mobileImg.src} width={mobileWidth} height={mobileHeight} />
   <source media='(min-width: 768px)' srcset={desktopImg.src} width={desktopWidth} height={desktopHeight} />
   <img
@@ -82,6 +82,7 @@ const inlineStyle = `${objectFitStyle} ${objectPositionStyle} ${additionalStyles
     width={desktopWidth}
     height={desktopHeight}
     style={inlineStyle}
+    class='pointer-events-none'
   />
 </picture>
 <style lang='scss'>

@@ -2,24 +2,221 @@
 import Layout from '../layouts/Layout.astro';
 import MV from '@/components/organism/top/MV.astro';
 import ParallaxElm from '@/components/molecules/ParallaxElm.astro';
-import { peoplePics, jpPics, usPics } from '@/data/data';
 import { getImage } from 'astro:assets';
-import Photo from '@/components/molecules/Photo.astro';
+import ImgPeople01 from '@/assets/imgs/common/people/img-people-01.jpg';
+import ImgPeople02 from '@/assets/imgs/common/people/img-people-02.jpg';
+import ImgPeople03 from '@/assets/imgs/common/people/img-people-03.jpg';
+import ImgPeople04 from '@/assets/imgs/common/people/img-people-04.jpg';
+import ImgPeople05 from '@/assets/imgs/common/people/img-people-05.jpg';
+import ImgPeople06 from '@/assets/imgs/common/people/img-people-06.jpg';
+import ImgPeople07 from '@/assets/imgs/common/people/img-people-07.jpg';
+import ImgPeople08 from '@/assets/imgs/common/people/img-people-08.jpg';
+import ImgPeople09 from '@/assets/imgs/common/people/img-people-09.jpg';
+import ImgPeople10 from '@/assets/imgs/common/people/img-people-10.jpg';
+import ImageWithCaption from '@/components/atoms/ImageWithCaption.astro';
+import ImgUs01 from '@/assets/imgs/common/us/img-us-01.jpg';
+import ImgUs02 from '@/assets/imgs/common/us/img-us-02.jpg';
+import ImgUs03 from '@/assets/imgs/common/us/img-us-03.jpg';
+import ImgUs04 from '@/assets/imgs/common/us/img-us-04.jpg';
+import ImgUs05 from '@/assets/imgs/common/us/img-us-05.jpg';
+import ImgUs06 from '@/assets/imgs/common/us/img-us-06.jpg';
+import ImgUs07 from '@/assets/imgs/common/us/img-us-07.jpg';
+import ImgUs08 from '@/assets/imgs/common/us/img-us-08.jpg';
+import ImgUs09 from '@/assets/imgs/common/us/img-us-09.jpg';
+import ImgUs10 from '@/assets/imgs/common/us/img-us-10.jpg';
+import ImgUs11 from '@/assets/imgs/common/us/img-us-11.jpg';
+import ImgUs12 from '@/assets/imgs/common/us/img-us-12.jpg';
+import ImgUs13 from '@/assets/imgs/common/us/img-us-13.jpg';
+import ImgUs14 from '@/assets/imgs/common/us/img-us-14.jpg';
+import ImgUs15 from '@/assets/imgs/common/us/img-us-15.jpg';
+import ImgUs16 from '@/assets/imgs/common/us/img-us-16.jpg';
+import ImgUs17 from '@/assets/imgs/common/us/img-us-17.jpg';
+import ImgUs18 from '@/assets/imgs/common/us/img-us-18.jpg';
+import ImgUs19 from '@/assets/imgs/common/us/img-us-19.jpg';
+import ImgUs20 from '@/assets/imgs/common/us/img-us-20.jpg';
+import ImgUs21 from '@/assets/imgs/common/us/img-us-21.jpg';
+import ImgUs22 from '@/assets/imgs/common/us/img-us-22.jpg';
+import ImgUs23 from '@/assets/imgs/common/us/img-us-23.jpg';
+import ImgJp01 from '@/assets/imgs/common/jp/img-jp-01.jpg';
+import ImgJp02 from '@/assets/imgs/common/jp/img-jp-02.jpg';
+import ImgJp03 from '@/assets/imgs/common/jp/img-jp-03.jpg';
+import ImgJp04 from '@/assets/imgs/common/jp/img-jp-04.jpg';
+import ImgJp05 from '@/assets/imgs/common/jp/img-jp-05.jpg';
+import ImgJp06 from '@/assets/imgs/common/jp/img-jp-06.jpg';
+import ImgJp07 from '@/assets/imgs/common/jp/img-jp-07.jpg';
+import ImgJp08 from '@/assets/imgs/common/jp/img-jp-08.jpg';
+import ImgJp09 from '@/assets/imgs/common/jp/img-jp-09.jpg';
+import ImgJp10 from '@/assets/imgs/common/jp/img-jp-10.jpg';
+import ImgJp11 from '@/assets/imgs/common/jp/img-jp-11.jpg';
+import ImgJp12 from '@/assets/imgs/common/jp/img-jp-12.jpg';
+import ImgJp13 from '@/assets/imgs/common/jp/img-jp-13.jpg';
+import ImgJp14 from '@/assets/imgs/common/jp/img-jp-14.jpg';
+import ImgJp15 from '@/assets/imgs/common/jp/img-jp-15.jpg';
+import ImgJp16 from '@/assets/imgs/common/jp/img-jp-16.jpg';
+import ImgJp17 from '@/assets/imgs/common/jp/img-jp-17.jpg';
+import ImgJp18 from '@/assets/imgs/common/jp/img-jp-18.jpg';
+import ImgJp19 from '@/assets/imgs/common/jp/img-jp-19.jpg';
 ---
 
 <Layout pageId='top'>
-  <main>
-    <section class='relative flex h-screen w-full items-center justify-center'>
-      <ParallaxElm className='absolute left-30 top-30 pc:w-200'>
-        <img data-sai='fade' src={peoplePics[0].src} alt='oshimoto.net | Photography Portfolio' class='h-auto w-200' />
-      </ParallaxElm>
-      <h2>OSHIMOTO RYUICHI</h2>
-    </section>
-    <section class='relative flex h-screen w-full items-center justify-center'>
-      <ParallaxElm className='absolute left-30 top-30 pc:w-200'>
-        <img src={peoplePics[0].src} alt='oshimoto.net | Photography Portfolio' class='h-auto w-200' />
-      </ParallaxElm>
-      <h2>OSHIMOTO RYUICHI</h2>
+  <div class='fixed bottom-10 left-10 z-10 flex gap-10 text-8'>
+    <a href='https://www.instagram.com/ryuichi_oshimoto_official/' target='_blank' class='text-8'>Instagram</a>
+    <a href='https://twitter.com/RyuichiOshimoto' target='_blank' class='text-8'>Twitter</a>
+    <a href='https://www.facebook.com/RyuOshimoto/' target='_blank' class='text-8'>Facebook</a>
+    <a href='https://www.youtube.com/@2865RO' target='_blank' class='text-8'>YouTube</a>
+  </div>
+  <div class='fixed left-10 top-half flex -translate-y-half whitespace-nowrap'>
+    <span
+      class='anchorTxt is-active absolute left-0 top-0 text-10 [writing-mode:vertical-lr]'
+      data-anchor='us-landscape'>
+      US LANDSCAPE
+    </span>
+    <span class='anchorTxt absolute left-0 top-0 text-10 [writing-mode:vertical-lr]' data-anchor='jp-landscape'>
+      JP LANDSCAPE
+    </span>
+    <span class='anchorTxt absolute left-0 top-0 text-10 [writing-mode:vertical-lr]' data-anchor='portraits'>
+      PORTRAITS
+    </span>
+  </div>
+  <main class='bg-[#F9F8F2]'>
+    <section class='relative flex h-640 sp:h-screen'>
+      <div
+        class='fixed left-0 top-0 z-3 flex h-full w-full flex-col items-center justify-center mix-blend-multiply'
+        data-sai='blurFade'>
+        <h2 class='relative text-center'>OSHIMOTO RYUICHI</h2>
+        <p class='pc:text-10 sp:text-10'>An experienced photographer</p>
+      </div>
+      <div class='js-sectionScroll left-0 top-0 z-2 flex h-full w-full flex-col py-50 pc:gap-24 pc:px-64'>
+        <section class='js-section us-landscape-sect flex w-full' data-anchor='us-landscape'>
+          <ParallaxElm className='shrink-0 pc:ml-40 pc:mt-400 pc:w-160 sp:m-60 sp:w-80'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgUs02} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:mt-100 pc:w-240 sp:m-60 sp:w-160'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgUs04} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='ml-auto shrink-0 pc:mr-80 pc:w-120 sp:mt-60 sp:w-120'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgUs10} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:ml-auto pc:mt-80 pc:w-480 sp:ml-60 sp:w-240'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgUs01} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+        </section>
+        <section class='js-section jp-landscape-sect flex w-full' data-anchor='jp-landscape'>
+          <ParallaxElm className='shrink-0 pc:ml-40 pc:mt-400 pc:w-320 sp:m-60 sp:w-80'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgJp02} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:-ml-64 pc:mt-100 pc:w-240 sp:m-60 sp:w-160'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgJp04} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='ml-auto shrink-0 pc:mr-80 pc:w-240 sp:mt-60 sp:w-120'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgJp10} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:ml-auto pc:mt-120 pc:w-360 sp:ml-60 sp:w-240'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption src={ImgJp01} alt='oshimoto.net | Photography Portfolio' className='h-auto w-full' />
+            </div>
+          </ParallaxElm>
+        </section>
+        <section class='js-section people-sect flex w-full' data-anchor='portraits'>
+          <ParallaxElm className='shrink-0 pc:ml-40 pc:mt-240 pc:w-160 sp:m-60 sp:w-80'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption
+                src={ImgPeople02}
+                alt='oshimoto.net | Photography Portfolio'
+                className='h-auto w-full'
+              />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:ml-32 pc:mt-100 pc:w-240 sp:m-60 sp:w-160'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption
+                src={ImgPeople04}
+                alt='oshimoto.net | Photography Portfolio'
+                className='h-auto w-full'
+              />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='ml-auto shrink-0 pc:mr-80 pc:w-120 sp:mt-60 sp:w-120'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption
+                src={ImgPeople03}
+                alt='oshimoto.net | Photography Portfolio'
+                className='h-auto w-full'
+              />
+            </div>
+          </ParallaxElm>
+          <ParallaxElm className='shrink-0 pc:ml-auto pc:mt-80 pc:w-240 sp:ml-60 sp:w-240'>
+            <div data-sai='blurFade'>
+              <ImageWithCaption
+                src={ImgPeople01}
+                alt='oshimoto.net | Photography Portfolio'
+                className='h-auto w-full'
+              />
+            </div>
+          </ParallaxElm>
+        </section>
+      </div>
     </section>
   </main>
 </Layout>
+<script>
+  const $anchorTxt = document.querySelectorAll('.anchorTxt');
+  const $sectionScroll = document.querySelector('.js-sectionScroll');
+  const $sections = $sectionScroll?.querySelectorAll('.js-section');
+  $sections?.forEach((section) => {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            $anchorTxt.forEach((anchorTxt) => {
+              const anchor = anchorTxt.getAttribute('data-anchor');
+              entry.target.classList.add('is-active');
+              if (anchor === section.getAttribute('data-anchor')) {
+                anchorTxt.classList.add('is-active');
+              } else {
+                entry.target.classList.remove('is-active');
+                anchorTxt.classList.remove('is-active');
+              }
+            });
+          }
+        });
+      },
+      {
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+    ).observe(section);
+  });
+</script>
+<style lang='scss' is:global>
+  .anchorTxt {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    &.is-active {
+      opacity: 1;
+    }
+  }
+  .js-section {
+    opacity: 0.8;
+    filter: grayscale(80%);
+    transition: 0.3s ease-in-out;
+    &.is-active {
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+  }
+</style>
